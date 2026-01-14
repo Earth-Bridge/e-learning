@@ -25,19 +25,19 @@ Remote sensing captures light reflected or emitted from Earth's surface, but the
 
 **Physics Meets Remote Sensing**
 
-Radiative Transfer Models (RTMs) are powerful computational tools that simulate light propagation, scattering, and absorption within virtual 3D scenes using the fundamental laws of physics. Unlike empirical models that depend on site-specific calibrations, RTMs are based on physical principles that remain valid across different ecosystems, sensors, and observation conditions. This makes them invaluable for interpreting satellite and airborne imagery, designing new sensors, and retrieving vegetation properties that cannot be directly measured from space.
+Radiative Transfer Models (RTMs) are powerful computational tools that simulate light propagation, scattering, and absorption within virtual scenes using the fundamental laws of physics. Unlike empirical models that depend on site-specific calibrations, RTMs are based on physical principles that remain valid across different ecosystems, sensors, and observation conditions. This makes them invaluable for interpreting satellite, airborne, and UAV imagery, designing new sensors, and retrieving vegetation properties that cannot be directly measured from space.
 
 **From Turbid Layers to 3D Forests**
 
-The evolution of RTMs parallels advances in computational power and our understanding of canopy architecture. Early 1D models treated vegetation as horizontally uniform layers—appropriate for agricultural fields but insufficient for complex forests. Modern 3D RTMs like DART (Discrete Anisotropic Radiative Transfer) can simulate detailed forest scenes with individual trees, accounting for shadows, multiple scattering between canopy elements, and the complex interplay between direct sunlight and diffuse sky radiation.
+The evolution of RTMs parallels advances in computational power and our possibilities of canopy architecture reconstruction. Simpler 1D models treated vegetation as horizontally uniform layers—appropriate for agricultural fields but insufficient for complex forests. Comlpex 3D RTMs like DART (Discrete Anisotropic Radiative Transfer) model can simulate detailed forest scenes with individual trees, accounting for shadows, multiple scattering between canopy elements, and the complex interplay between direct sunlight and diffuse sky radiation.
 
 **The DART Advantage**
 
-DART represents the state-of-the-art in 3D radiative transfer modeling. Developed by [CESBIO](https://www.cesbio.cnrs.fr/) (Centre d'Etudes Spatiales de la BIOsphère), it simulates the complete radiative budget of natural and urban landscapes. DART can generate synthetic remote sensing imagery—from optical reflectance to thermal emission to LiDAR waveforms—that mimics what satellites and aircraft would observe over real terrain. This capability enables researchers to test retrieval algorithms, optimize sensor designs, and understand which spectral bands contain information about specific vegetation traits.
+DART represents the state-of-the-art in complex 3D radiative transfer modeling. Developed by [CESBIO](https://www.cesbio.cnrs.fr/) (Centre d'Etudes Spatiales de la BIOsphère), it simulates the complete radiative budget of natural and urban landscapes. DART can generate synthetic remote sensing imagery—from optical reflectance to thermal emission to LiDAR waveforms—that mimics what satellites, aircraft, or UAVs would observe over real terrain. This capability enables researchers to develop retrieval algorithms, optimize sensor designs, and understand which spectral bands contain information about specific vegetation traits.
 
 **The Challenge and Opportunity**
 
-Using RTMs requires careful parameterization: leaf optical properties, 3D canopy structure, atmospheric conditions, and sensor geometry must all be specified. This complexity creates both challenge and opportunity. The challenge lies in obtaining accurate input data through field measurements or existing databases. The opportunity lies in the unprecedented ability to link remote sensing signals to biophysical processes, enabling quantitative ecosystem monitoring from leaf to landscape scales.
+Using RTMs requires careful parameterization: optical properties of leaves and all elements in the scene, 3D canopy structure, atmospheric conditions, and sensor geometry must all be specified. This complexity creates both challenge and opportunity. The challenge lies in obtaining accurate input data through field measurements or existing databases. The opportunity lies in the unprecedented ability to link remote sensing signals to biophysical processes, enabling quantitative ecosystem monitoring from leaf to landscape scales.
 
 ## Where to go further?
 
@@ -67,6 +67,6 @@ Follow the [**practical tutorial**](DART_tutorial.qmd) to learn how to:
 -   Run simulations and generate synthetic imagery
 -   Create Look-Up Tables (LUTs) for trait retrieval
 
----
+------------------------------------------------------------------------
 
 ![](logos.png)

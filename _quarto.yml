@@ -25,14 +25,17 @@ website:
           - text: "Practice"
             href: topics/DART_tutorial.qmd
       - text: "RADAR Basics"
+        menu:
+          - text: "Theory"
+            href: topics/RADAR_theory.qmd
       - text: "SAR Tomography"
         menu:
           - text: "Intro"
-          - href: topics/SART_intro.qmd
+            href: topics/SART_intro.qmd
           - text: "Theory"
-          - href: topics/SART_theory.qmd
+            href: topics/SART_theory.qmd
           - text: "Practice"
-          - href: topics/SART_tutorial.qmd
+            href: topics/SART_tutorial.qmd
       - text: "ALS Processing"
         menu:
           - text: "Intro"

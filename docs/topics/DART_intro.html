@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Růžena Janoutová, Vojtěch Barták">
-<meta name="dcterms.date" content="2025-12-18">
+<meta name="dcterms.date" content="2026-01-14">
 
 <title>Radiative Transfer Modeling with DART: An Introduction – Remote Sensing of Forests</title>
 <style>
@@ -3891,30 +3891,33 @@ vertical-align: -.125em;
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <span class="nav-link">
-<span class="menu-text">RADAR Basics</span>
-    </span>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-radar-basics" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">RADAR Basics</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-radar-basics">    
+        <li>
+    <a class="dropdown-item" href="../topics/RADAR_theory.html">
+ <span class="dropdown-text">Theory</span></a>
   </li>  
+    </ul>
+  </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sar-tomography" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">SAR Tomography</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-sar-tomography">    
-        <li class="dropdown-header">Intro</li>
         <li>
     <a class="dropdown-item" href="../topics/SART_intro.html">
- <span class="dropdown-text">SAR Tomography of Forests: An Introduction</span></a>
+ <span class="dropdown-text">Intro</span></a>
   </li>  
-        <li class="dropdown-header">Theory</li>
         <li>
     <a class="dropdown-item" href="../topics/SART_theory.html">
- <span class="dropdown-text">Theoretical Background: Synthetic Aperture Radar Tomography of Forests</span></a>
+ <span class="dropdown-text">Theory</span></a>
   </li>  
-        <li class="dropdown-header">Practice</li>
         <li>
     <a class="dropdown-item" href="../topics/SART_tutorial.html">
- <span class="dropdown-text">SAR Tomography of Tropical Forests</span></a>
+ <span class="dropdown-text">Practice</span></a>
   </li>  
     </ul>
   </li>
@@ -3988,7 +3991,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 18, 2025</p>
+      <p class="date">January 14, 2026</p>
     </div>
   </div>
   
@@ -4004,13 +4007,13 @@ vertical-align: -.125em;
 <h2 class="anchored" data-anchor-id="introduction-to-radiative-transfer-modeling">Introduction to Radiative Transfer Modeling</h2>
 <p>Remote sensing captures light reflected or emitted from Earth’s surface, but these spectral signals encode complex information about vegetation structure, biochemistry, and function. To unlock this information and make quantitative predictions about ecosystem properties, we need more than statistical correlations—we need physical understanding of how light interacts with plant canopies.</p>
 <p><strong>Physics Meets Remote Sensing</strong></p>
-<p>Radiative Transfer Models (RTMs) are powerful computational tools that simulate light propagation, scattering, and absorption within virtual 3D scenes using the fundamental laws of physics. Unlike empirical models that depend on site-specific calibrations, RTMs are based on physical principles that remain valid across different ecosystems, sensors, and observation conditions. This makes them invaluable for interpreting satellite and airborne imagery, designing new sensors, and retrieving vegetation properties that cannot be directly measured from space.</p>
+<p>Radiative Transfer Models (RTMs) are powerful computational tools that simulate light propagation, scattering, and absorption within virtual scenes using the fundamental laws of physics. Unlike empirical models that depend on site-specific calibrations, RTMs are based on physical principles that remain valid across different ecosystems, sensors, and observation conditions. This makes them invaluable for interpreting satellite, airborne, and UAV imagery, designing new sensors, and retrieving vegetation properties that cannot be directly measured from space.</p>
 <p><strong>From Turbid Layers to 3D Forests</strong></p>
-<p>The evolution of RTMs parallels advances in computational power and our understanding of canopy architecture. Early 1D models treated vegetation as horizontally uniform layers—appropriate for agricultural fields but insufficient for complex forests. Modern 3D RTMs like DART (Discrete Anisotropic Radiative Transfer) can simulate detailed forest scenes with individual trees, accounting for shadows, multiple scattering between canopy elements, and the complex interplay between direct sunlight and diffuse sky radiation.</p>
+<p>The evolution of RTMs parallels advances in computational power and our possibilities of canopy architecture reconstruction. Simpler 1D models treated vegetation as horizontally uniform layers—appropriate for agricultural fields but insufficient for complex forests. Comlpex 3D RTMs like DART (Discrete Anisotropic Radiative Transfer) model can simulate detailed forest scenes with individual trees, accounting for shadows, multiple scattering between canopy elements, and the complex interplay between direct sunlight and diffuse sky radiation.</p>
 <p><strong>The DART Advantage</strong></p>
-<p>DART represents the state-of-the-art in 3D radiative transfer modeling. Developed by <a href="https://www.cesbio.cnrs.fr/">CESBIO</a> (Centre d’Etudes Spatiales de la BIOsphère), it simulates the complete radiative budget of natural and urban landscapes. DART can generate synthetic remote sensing imagery—from optical reflectance to thermal emission to LiDAR waveforms—that mimics what satellites and aircraft would observe over real terrain. This capability enables researchers to test retrieval algorithms, optimize sensor designs, and understand which spectral bands contain information about specific vegetation traits.</p>
+<p>DART represents the state-of-the-art in complex 3D radiative transfer modeling. Developed by <a href="https://www.cesbio.cnrs.fr/">CESBIO</a> (Centre d’Etudes Spatiales de la BIOsphère), it simulates the complete radiative budget of natural and urban landscapes. DART can generate synthetic remote sensing imagery—from optical reflectance to thermal emission to LiDAR waveforms—that mimics what satellites, aircraft, or UAVs would observe over real terrain. This capability enables researchers to develop retrieval algorithms, optimize sensor designs, and understand which spectral bands contain information about specific vegetation traits.</p>
 <p><strong>The Challenge and Opportunity</strong></p>
-<p>Using RTMs requires careful parameterization: leaf optical properties, 3D canopy structure, atmospheric conditions, and sensor geometry must all be specified. This complexity creates both challenge and opportunity. The challenge lies in obtaining accurate input data through field measurements or existing databases. The opportunity lies in the unprecedented ability to link remote sensing signals to biophysical processes, enabling quantitative ecosystem monitoring from leaf to landscape scales.</p>
+<p>Using RTMs requires careful parameterization: optical properties of leaves and all elements in the scene, 3D canopy structure, atmospheric conditions, and sensor geometry must all be specified. This complexity creates both challenge and opportunity. The challenge lies in obtaining accurate input data through field measurements or existing databases. The opportunity lies in the unprecedented ability to link remote sensing signals to biophysical processes, enabling quantitative ecosystem monitoring from leaf to landscape scales.</p>
 </section>
 <section id="where-to-go-further" class="level2">
 <h2 class="anchored" data-anchor-id="where-to-go-further">Where to go further?</h2>
