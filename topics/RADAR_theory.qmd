@@ -204,7 +204,7 @@ One of the most fundamental principles governing radar remote sensing of vegetat
 
 @fig-wavelength-penetration illustrates this principle by showing a single tree structure as "seen" by different radar wavelengths. The progression from left to right—X-band (λ = 3 cm) through L-band (λ = 27 cm) to P-band (λ = 70 cm) and VHF (λ > 3 m)—reveals how longer wavelengths progressively see through smaller structural elements to interact with larger components deeper in the canopy.
 
-![Wavelength-dependent penetration and scattering in forest canopies. The same tree structure appears progressively more transparent at longer wavelengths. X-band (3 cm) interacts primarily with leaves and small branches in the upper canopy. L-band (27 cm) penetrates through foliage to interact with larger branches and some trunk components. P-band (70 cm) penetrates to the ground, interacting primarily with large branches and trunks. VHF (>3 m) wavelengths pass through most canopy structure, interacting primarily with trunks and ground. Source: Le Toan 2007.](RADAR_figures/wavelength_penetration.png){#fig-wavelength-penetration width="100%"}
+![Wavelength-dependent penetration and scattering in forest canopies. The same tree structure appears progressively more transparent at longer wavelengths. X-band (3 cm) interacts primarily with leaves and small branches in the upper canopy. L-band (27 cm) penetrates through foliage to interact with larger branches and some trunk components. P-band (70 cm) penetrates to the ground, interacting primarily with large branches and trunks. VHF (>3 m) wavelengths pass through most canopy structure, interacting primarily with trunks and ground. Source: Thuy Le Toan, 6th ESA Advanced Course on Radar Polarimetry 2021.](RADAR_figures/wavelength_penetration.png){#fig-wavelength-penetration width="100%"}
 
 ### Standard Radar Frequency Bands
 
@@ -258,7 +258,7 @@ The wavelength-dependent nature of radar-vegetation interaction has profound imp
 
 **For subsurface imaging**: P-band and VHF enable detection of subsurface features, including archaeological remains beneath forest canopy and ice structure beneath dry snow [@moreira2013tutorial].
 
-## Polarization: A Multi-Dimensional View
+## Polarization: A Multi-Dimensional View {#sec-polarization}
 
 Beyond wavelength, **polarization**—the orientation of the electromagnetic field—provides an additional dimension for characterizing surface and volume scattering properties. Polarimetric radar systems transmit and receive both horizontally (H) and vertically (V) polarized radiation, enabling measurement of how surfaces and volumes transform polarization through scattering [@cloude2009polarisation].
 

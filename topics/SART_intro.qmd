@@ -43,12 +43,12 @@ Watch the **video lecture** in which Dr. Xiao Liu introduces the key concepts fo
 
 View and download the **presentation** from the video:
 
-[![](SART_figures/thumbnail_tomosar.png){.border width="200px"}](https://drive.google.com/file/d/1p_Wg5RM1QuyV-CdStufTbki34T_VlCG9/view?usp=sharing)
+[![](SART_figures/thumbnail_tomosar.png){.border width="200px"}](https://drive.google.com/file/d/1WFppkzR2ri0QlADsE4D-nHiEggEFf-MP/view?usp=sharing)
 
 Read the [**theory**](SART_theory.qmd)
 
 Analyze real data with a [**practical tutorial in Python**](SART_tutorial.qmd)
 
----
+------------------------------------------------------------------------
 
 ![](logos.png)

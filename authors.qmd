@@ -25,7 +25,7 @@ Růžena Janoutová is a researcher at CzechGlobe specialising in 3D tree recons
 
 ![](liu.jpg)
 
-Xiao Liu finished his PhD at TU Dresden in 2025, working in environmental remote sensing. His research interests include radar and LiDAR processing, vegetation structure modelling, and the application of advanced machine learning techniques to monitor forest dynamics and biodiversity.
+Xiao Liu finished his PhD at TUD Dresden University of Technology in 2025, working in environmental remote sensing. His research interests include radar and LiDAR processing, vegetation structure modelling, and the application of advanced machine learning techniques to monitor forest dynamics.
 
 ## Fabian Fischer (Technical University of Munich – TUM)
 

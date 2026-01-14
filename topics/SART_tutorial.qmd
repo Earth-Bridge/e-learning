@@ -26,19 +26,28 @@ editor: visual
 
 ## Overview
 
-This tutorial demonstrates SAR tomography (TomoSAR) analysis of tropical forests using P-band data from the AfriSAR 2016 campaign. We'll process multi-baseline SAR data to extract 3D forest structure information and compare results with LiDAR measurements. The analysis covers data preprocessing, covariance matrix computation, tomographic inversion, and validation against airborne LiDAR forest height and biomass data.
+This tutorial demonstrates SAR tomography (TomoSAR) analysis of tropical forests using P-band data from the AfriSAR 2016 campaign. We'll process multi-baseline SAR data to extract 3D forest structure information and compare results with LiDAR measurements. The analysis covers data preprocessing, covariance matrix computation, tomographic inversion, and comparison against airborne LiDAR forest height and biomass data.
 
 ::: callout-note
-## Tutorial Background
+## Tutorial Background and Data
 
 This script is developed based on the [TomoSAR tutorial from EO-College](https://github.com/EO-College/tomography_tutorial).
 
-**Data**: [F-SAR P-band TomoSAR data from AfriSAR 2016 campaign](https://drive.google.com/file/d/1eMuHnjJNZy8F_q6qC7Mzazw8e8WmV_By/view?usp=drive_link) **Study site**: Lopé National Park, Gabon **Contact**: xiao.liu\@mailbox.tu-dresden.de
+**Data**: [F-SAR P-band TomoSAR data from AfriSAR 2016 campaign](https://drive.google.com/file/d/1doPzrqisD89UNam_vDvuS2lbamiHLVqB/view?usp=sharing)
+
+**Study site**: Lopé National Park, Gabon 
+
+**Data sources**:
+
+- SAR data: <https://earth.esa.int/eogateway/campaigns/afrisar-2016>
+- LiDAR data: <https://lvis.gsfc.nasa.gov/Data/Maps/Gabon2016Map.html>
+
+**Contact**: xiao.liu\@tu-dresden.de
 :::
 
 ## Prerequisites
 
-Before starting, you'll need to install the required Python packages and set up your working environment.
+Before starting, you'll need to install the [required Python packages](https://drive.google.com/file/d/18cnV2tv5PlSHgOdaFzmXbnSwT9cRWh0e/view?usp=sharing) and set up your working environment.
 
 ```{python}
 #| label: setup-packages
@@ -106,7 +115,7 @@ from tomosar_plotting import cov_mat_plot, tomo_plot, \
 ::: callout-important
 ## Required Functions
 
-These custom functions handle the core TomoSAR processing pipeline. Ensure the `tomosar_toolbox.py` and `tomosar_plotting.py` modules are in your workspace directory.
+These custom functions handle the core TomoSAR processing pipeline. Ensure the [`tomosar_toolbox.py`](https://drive.google.com/file/d/1eVjhHKqqHK4Ms9rOucT8eh3jUndSGkm8/view?usp=sharing) and [`tomosar_plotting.py`](https://drive.google.com/file/d/1FbiR-9WB3f8vX8aZm3Jy4icaEuwMT_jH/view?usp=sharing) modules are in your workspace directory.
 :::
 
 ## Part 2: Parameter Configuration
@@ -148,8 +157,8 @@ else:
 ::: callout-tip
 ## Parameter Selection
 
--   **Multi-look size**: Larger values (50m) provide more stable estimates but lower spatial resolution
--   **Polarization**: HH is most sensitive to forest structure; HV to volume scattering
+-   **Multi-look size**: Larger values (50m) provide more stable InSAR phase estimates but lower spatial resolution
+-   **Polarization**: HV is most sensitive to forest structure
 -   **Capon beamformer**: Provides better vertical resolution than conventional beamforming
 -   **Terrain correction**: Essential for accurate height estimation in sloped terrain
 :::
@@ -356,8 +365,8 @@ print(f"TomoSAR result shape: {tomo.shape}")
 ::: callout-note
 ## TomoSAR Methods
 
--   **Capon (MVDR)**: Minimum Variance Distortionless Response beamformer, provides better resolution
--   **Beamforming**: Conventional delay-and-sum beamformer, more robust but lower resolution
+-   **Capon**: High spatial resolution, low radiometric accuracy
+-   **Beamforming**: Low spatial resolution, high radiometric accuracy
 :::
 
 ### Normalizing Reflectivity Profiles
@@ -400,7 +409,7 @@ The vertical reflectivity profile shows:
 -   **Canopy top**: Upper extent of forest structure
 :::
 
-## Part 7: Validation with LiDAR Data
+## Part 7: Relating TomoSAR Reflectivity with Forest Height and Above-Ground Biomass
 
 ### Loading LiDAR Reference Data
 
@@ -517,11 +526,22 @@ if terrain_cor_flag == 1:
 ::: panel-tabset
 ## Key Takeaways
 
-**Data Preprocessing** - Multi-baseline SAR data requires careful phase calibration - Terrain correction is essential for accurate height estimation - Multi-looking balances noise reduction and spatial resolution
+**Data Preprocessing** 
 
-**Tomographic Inversion** - Capon beamformer provides better vertical resolution than conventional methods - Vertical profiles reveal ground and canopy structure - Phase center height correlates with forest structure
+- Multi-baseline SAR data requires careful phase calibration 
+- Terrain correction is essential for accurate height estimation 
+- Multi-looking balances noise reduction and spatial resolution
 
-**Validation Results** - TomoSAR profiles show strong agreement with LiDAR measurements - Penetration depth varies with polarization and forest density - Biomass estimation benefits from multi-layer information
+**Tomographic Inversion** 
+
+- Capon beamformer provides better vertical resolution than conventional methods 
+- Vertical profiles reveal ground and canopy structure
+
+**Comparison Results** 
+
+- TomoSAR profiles are sensitive to different forest height and biomass groups 
+- Penetration depth varies with polarization and forest density 
+- Biomass estimation benefits from multi-layer information
 
 ## Best Practices
 
@@ -561,7 +581,7 @@ The integration of multiple polarizations, processing methods, and independent v
 When applying these methods to your own data:
 
 -   **Baseline configuration**: Ensure adequate vertical wavenumber sampling
--   **Data quality**: Check for phase unwrapping errors and temporal decorrelation
+-   **Data quality**: Check for phase calibration and temporal decorrelation
 -   **Terrain effects**: Always apply terrain correction in mountainous areas
 -   **Validation data**: Use concurrent LiDAR or field measurements when possible
 -   **Processing parameters**: Adjust multi-look size based on forest heterogeneity
@@ -571,6 +591,6 @@ When applying these methods to your own data:
 
 *This tutorial provides both theoretical understanding and practical implementation for SAR tomography analysis. The modular structure allows adaptation to different datasets and research questions.*
 
----
+------------------------------------------------------------------------
 
 ![](logos.png)

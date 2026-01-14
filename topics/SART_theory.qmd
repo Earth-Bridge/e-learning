@@ -69,7 +69,7 @@ A key innovation of P-band observations is the ability to image not only the upp
 
 The foundation of SAR tomography lies in interferometry, which exploits phase measurements to determine relative distances. In radar systems, phase represents the position within a wave cycle and can be understood as a relative distance measurement.
 
-![Phase as a relative distance indicator. Left: Complex number representation showing phase angle φ. Center: Sinusoidal wave showing the relationship between wavelength λ and phase. Right: Phase difference between two points (A, B₁, B₂) separated by distance d relates to their relative positions. Source: Iain H. Woodhouse, 2017](SART_figures/slide5_phase_distance.png){#fig-phase width="100%"}
+![Phase as a relative distance indicator. Left: Complex number representation showing phase angle φ. Center: Sinusoidal wave showing the relationship between wavelength λ and phase. Right: Phase difference between two points (A, B₁, B₂) separated by distance d relates to their relative positions. Adapted from: Iain H. Woodhouse, 2017](SART_figures/slide5_phase_distance.png){#fig-phase width="100%"}
 
 As illustrated in @fig-phase, electromagnetic waves can be represented as rotating vectors (phasors) or sinusoidal functions. The key relationship is that one complete 2π rotation corresponds to one wavelength (λ) of propagation. If we know the phase difference (Δφ) between two observations, we can estimate the corresponding path difference:
 
@@ -83,7 +83,7 @@ Consider two radar sensors (B₁ and B₂) observing the same forest target. The
 
 InSAR combines observations from two or more SAR acquisitions to measure surface topography and detect changes. The term "interferometry" refers to measuring properties through the interference of waves.
 
-![InSAR principle illustrated with interference patterns. Left: Two wave sources create characteristic fringe patterns where waves constructively or destructively interfere. Right: Applying this principle from space, two SAR acquisitions from slightly different positions create interferometric fringes that encode topographic information. Maxima occur when path difference ΔR = nλ, corresponding to phase difference Δφ = n·2π. Source: Iain H. Woodhouse, 2017](SART_figures/slide6_insar.png){#fig-insar width="100%"}
+![InSAR principle illustrated with interference patterns. Two wave sources create characteristic fringe patterns where waves constructively or destructively interfere. Applying this principle from space, two SAR acquisitions from slightly different positions create interferometric fringes that encode topographic information. Maxima occur when path difference ΔR = nλ, corresponding to phase difference Δφ = n·2π. Adapted from: Iain H. Woodhouse, 2017](SART_figures/slide6_insar.png){#fig-insar width="100%"}
 
 @fig-insar demonstrates the interferometric principle. When two wave sources emit coherent radiation, regions where the waves arrive in phase create maxima (constructive interference), while regions where they arrive out of phase create minima (destructive interference). This creates characteristic fringe patterns.
 
@@ -93,7 +93,7 @@ In spaceborne InSAR, even over completely flat terrain, fringe patterns emerge b
 
 While individual SAR phase images appear chaotic and random, the phase difference between two carefully selected acquisitions reveals meaningful patterns.
 
-![From random phase to meaningful interferometric patterns. Left: Amplitude and phase of a single SAR image—the phase appears random. Center: Phase difference between two SAR images (wrapped interferogram) reveals systematic fringe patterns. Right: After unwrapping and further processing, a Digital Elevation Model (DEM) is derived. Source: DLR](SART_figures/slide8_insar_dem.png){#fig-phase-diff width="100%"}
+![From random phase to meaningful interferometric patterns. Left: Amplitude and phase of a single SAR image—the phase appears random. Center: Phase difference between two SAR images (wrapped interferogram) reveals systematic fringe patterns. Right: After unwrapping and further processing, a Digital Elevation Model (DEM) is derived. Source: Michael Eineder and Richard Bamler, EO-College (license: CC BY-SA 4.0).](SART_figures/slide8_insar_dem.png){#fig-phase-diff width="100%"}
 
 @fig-phase-diff illustrates this transformation. A single SAR image's phase appears as random noise, but when two images are properly aligned and their phases differenced, regular fringe patterns emerge (the wrapped interferogram). Through phase unwrapping and geometric processing, these fringes can be converted into topographic height information, producing a Digital Elevation Model (DEM).
 
@@ -101,7 +101,7 @@ While individual SAR phase images appear chaotic and random, the phase differenc
 
 Not all interferometric phase measurements are equally reliable. Coherence quantifies the quality and consistency of the interferometric phase.
 
-![Coherence as an indicator of interferometric phase quality. Interferograms with different coherence values (1.0, 0.8, 0.4, 0.2) show progressively degraded fringe visibility. High coherence (γ ≈ 1) indicates clear, reliable phase patterns, while low coherence (γ ≈ 0) indicates noisy, unreliable phase information. Source: Irena Hajnsek](SART_figures/slide9_coherence.png){#fig-coherence width="70%"}
+![Coherence as an indicator of interferometric phase quality. Interferograms with different coherence values (1.0, 0.8, 0.4, 0.2) show progressively degraded fringe visibility. High coherence (γ ≈ 1) indicates clear, reliable phase patterns, while low coherence (γ ≈ 0) indicates noisy, unreliable phase information. Source: Irena Hajnsek, 6th ESA Advanced Course on Radar Polarimetry 2021.](SART_figures/slide9_coherence.png){#fig-coherence width="70%"}
 
 Coherence ($\hat{\gamma}$) is calculated as:
 
@@ -139,9 +139,7 @@ The tomographic resolution cell is oriented according to the radar viewing geome
 
 ## TomoSAR of Forests: Key Influencing Factors
 
-The reflectivity profiles retrieved through TomoSAR depend on multiple interacting factors related to the sensor, platform, processing algorithms, and forest characteristics themselves.
-
-![TomoSAR reflectivity profiles showing vertical forest structure. Left: 3D visualization of TomoSAR data over forest, with azimuth and slant range dimensions. Right: Vertical profiles at different height layers (0-50m), revealing surface, understory, and canopy scattering components. Key factors influencing these profiles include polarization, wavelength, flight configuration, inversion algorithms, and forest vertical structure. Source: Multiple](SART_figures/slide11_tomosar_factors.png){#fig-tomo-factors width="100%"}
+![TomoSAR reflectivity profiles showing vertical forest structure. Left: 3D visualization of TomoSAR data over forest, with azimuth and slant range dimensions. Right: Vertical profiles at different height layers (0-50m), revealing surface, understory, and canopy scattering components. Key factors influencing these profiles include polarization, wavelength, flight configuration, inversion algorithms, and forest vertical structure. Source: https://nbn-resolving.org/urn:nbn:de:bsz:14-qucosa2-990344](SART_figures/slide11_tomosar_factors.png){#fig-tomo-factors width="100%"}
 
 As illustrated in @fig-tomo-factors, TomoSAR provides vertical profiles of radar reflectivity, typically showing distinct peaks corresponding to the ground surface and canopy elements. However, the characteristics of these profiles are sensitive to:
 
@@ -152,7 +150,7 @@ As illustrated in @fig-tomo-factors, TomoSAR provides vertical profiles of radar
 
 ### Effect of Polarization
 
-Different polarizations interact with forest structure in distinct ways. HH polarization (horizontal transmit and receive) tends to penetrate more deeply, showing stronger ground returns. HV or VH cross-polarization emphasizes volume scattering from branches and foliage. VV polarization shows intermediate behavior.
+Radar polarization describes the orientation and behavior of the electromagnetic wave transmitted and received by a radar system. Common polarizations include horizontal (H) and vertical (V), leading to modes such as HH, VV, HV, and VH, which indicate the polarization of the transmitted and received signals. Different targets interact with these polarizations in distinct ways depending on their shape, orientation, and surface properties. By comparing responses from multiple polarizations, radar systems can better distinguish surface features, vegetation, and man-made objects, and can improve target classification and physical interpretation of the observed scene (for more detailed discussion see the section on [Radar basics](RADAR_theory.qmd#sec-polarization)).
 
 ![TomoSAR profiles for different polarizations. Left: False-color composite (HH:Red, HV:Green, VV:Blue) showing structural differences. Right: Vertical profiles for HH, HV, and VV polarizations, and the combined RGB representation. F-SAR P-band data with 11 flight tracks. HH shows stronger ground return, HV shows more distributed volume scattering, VV is intermediate. Source: Multiple](SART_figures/slide12_polarization.png){#fig-polarization width="100%"}
 
@@ -181,7 +179,7 @@ This decomposition is particularly valuable for accurate ground surface estimati
 
 Different radar wavelengths penetrate forest canopies to different depths, resulting in distinct TomoSAR signatures.
 
-![TomoSAR profiles at different wavelengths. Top to bottom: P-band HV 2009, L-band HV 2009, L-band HV 2013, X-band HV 2013. P-band shows deepest penetration with clear ground returns even in dense forest. L-band shows moderate penetration. X-band shows minimal penetration, with scattering concentrated in the upper canopy. Source: Pardini et al. (2019). Tree illustrations on the right indicate the relative penetration depth of each wavelength. Source: Thuy Le Toan, CESBIO, France.](SART_figures/slide14_wavelength.png){#fig-wavelength width="100%"}
+![TomoSAR profiles at different wavelengths. Top to bottom: P-band HV 2009, L-band HV 2009, L-band HV 2013, X-band HV 2013. P-band shows deepest penetration with clear ground returns even in dense forest. L-band shows moderate penetration. X-band shows minimal penetration, with scattering concentrated in the upper canopy. Source: Pardini et al. (2019). Tree illustrations on the right indicate the relative penetration depth of each wavelength. Source: Thuy Le Toan, 6th ESA Advanced Course on Radar Polarimetry 2021.](SART_figures/slide14_wavelength.png){#fig-wavelength width="100%"}
 
 @fig-wavelength compares profiles across wavelengths ranging from X-band (~3 cm) to P-band (~70 cm):
 
