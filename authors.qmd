@@ -21,7 +21,7 @@ David Moravec is a remote sensing specialist at CZU with expertise in environmen
 
 Růžena Janoutová is a researcher at CzechGlobe specialising in 3D tree reconstruction based on terrestrial laser scanning data for implementation in radiative transfer models with application in optical and laser scanning remote sensing of vegetation. Her work focuses on forest ecosystem monitoring, spectral analysis, and the development of methods for detecting environmental stress and changes in vegetation dynamics.
 
-## Xiao Liu (Technische Universität Dresden – TUD)
+## Xiao Liu (TUD Dresden University of Technology)
 
 ![](liu.jpg)
 

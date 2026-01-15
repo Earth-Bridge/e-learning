@@ -1,5 +1,5 @@
 ---
-title: "Theoretical Background: Radiative Transfer Modelling for Ecosystem Monitoring"
+title: "Theoretical Background: Radiative Transfer Modelling for Remote Sensing applications"
 author: "Růžena Janoutová"
 date: today
 format:
@@ -19,7 +19,7 @@ bibliography: DART_references.bib
 
 ## Introduction: The Power of Physical Modelling
 
-Remote sensing provides us with unprecedented capabilities to observe Earth's ecosystems from above. However, the spectral signals captured by satellite and airborne sensors represent complex interactions between electromagnetic radiation and vegetation structures. To unlock the full information content of these signals, we need more than statistical relationships—we need physical understanding of how light interacts with plant canopies.
+Remote sensing provides us with unprecedented capabilities to observe Earth's ecosystems from above. However, the spectral signals captured by satellite and airborne sensors represent complex interactions between electromagnetic radiation, vegetation structures, and biochemical processes. To unlock the full information content of these signals, we need more than statistical relationships—we need physical understanding of how light interacts with plant canopies.
 
 Radiative Transfer Models (RTMs) are powerful tools that use physical equations to simulate light interaction within virtual scenes, including forests, agricultural fields, and urban environments. Unlike empirical models that rely on correlations between spectral data and field measurements, RTMs are based on the fundamental laws of physics governing light propagation, scattering, and absorption. 
 
@@ -29,19 +29,19 @@ A critical advantage of RTMs is that **you control all the parameters** in your 
 - **Understanding ecosystem processes** related to light scattering and energy balance
 - **Conducting sensitivity analyses** to determine which structural or biochemical factors most strongly influence your remote sensing data
 - **Designing new sensors** and optimizing acquisition strategies
-- **Retrieving vegetation traits** that cannot be directly measured from space
+- **Retrieving vegetation traits** that cannot be directly measured
 
-The evolution from simple 1D turbid medium approximations to complex 3D ray-tracing models has paralleled advances in computational power and our understanding of canopy architecture. Today's RTMs can simulate scenes with remarkable detail, from individual leaf biochemistry to landscape-scale heterogeneity.
+The evolution from simple 1D turbid medium approximations to complex 3D ray-tracing models has paralleled advances in computational power and our possibilities of canopy architecture reconstruction. Today's RTMs can simulate scenes with remarkable detail, from individual leaf biochemistry to landscape-scale heterogeneity.
 
 ## Types of Radiative Transfer Models
 
 RTMs operate at different spatial scales and levels of complexity, each designed for specific applications and data types. Understanding this hierarchy is essential for selecting the appropriate model for a given research question.
 
-**Hierarchical Relationship**: It's important to recognize that leaf-level and canopy-level RTMs are interconnected. While they produce different types of outputs, **canopy-level models typically require leaf-level models as inputs**. The optical properties (reflectance and transmittance) simulated by leaf-level RTMs serve as fundamental input parameters for canopy-level simulations. This hierarchical structure means that understanding leaf optics is essential for accurate canopy-scale modelling.
+**Hierarchical Relationship**: It's important to recognize that leaf-level and canopy-level RTMs are interconnected. While they produce different types of outputs, **canopy-level models typically require leaf-level models products as inputs**. The optical properties (reflectance and transmittance) simulated by leaf-level RTMs serve as fundamental input parameters for canopy-level simulations. This hierarchical structure means that understanding leaf optics is essential for accurate canopy-scale modelling.
 
 ### Leaf-Level RTMs
 
-![Leaf-level radiative transfer mechanisms. (a) Light interaction with leaf structure: polarized (red) and non-polarized (black) light interact through surface reflection at micro-facets, absorption by chloroplasts, and scattering within mesophyll tissue. (b) Conceptual diagram showing light interaction with leaf surface and internal structures including epidermis, palisade, spongy mesophyll, and air spaces. (c) Simplified plate model showing light transmission and reflection through mesophyll layers with refractive index n>1. (c) Detailed representation of light path including surface reflection and internal scattering at multiple interfaces. (d) Multi-layer representation with N layers showing transmittance (T_N) and reflectance (R_N) terms. Sources: (a) Li et al. (2025), (b)  Xu and Ye (2023).](DART_figures/fig_leaf_level_rtm.png){#fig-leaf-rtm width="100%"}
+![Leaf-level radiative transfer mechanisms. (a) Light interaction with leaf structure: polarized (red) and non-polarized (black) light interact through surface reflection at micro-facets, absorption by chloroplasts, and scattering within mesophyll tissue. (b) Conceptual diagram showing light interaction with leaf surface and internal structures including epidermis, palisade, spongy mesophyll, and air spaces. (c) Simplified plate model showing light transmission and reflection through mesophyll layers with refractive index n>1. (d) Detailed representation of light path including surface reflection and internal scattering at multiple interfaces. (e) Multi-layer representation with N layers showing transmittance (T_N) and reflectance (R_N) terms. Sources: (a) Li et al. (2025), (b)  Xu and Ye (2023).](DART_figures/fig_leaf_level_rtm.png){#fig-leaf-rtm width="100%"}
 
 Leaf-level RTMs simulate the optical properties of individual leaves based on their internal structure and biochemical composition [@jacquemoud1990prospect]. @fig-leaf-rtm illustrates the complex interactions of light within leaf tissues. Key components include:
 
@@ -54,25 +54,29 @@ Leaf-level RTMs simulate the optical properties of individual leaves based on th
 
 **Light Interaction Mechanisms:**
 
-The plate model (@fig-leaf-rtm panels b-d) shows how light propagates through leaf layers. At each interface between materials with different refractive indices (typically air n=1 and cell wall material n≈1.4), light undergoes:
+The plate model (@fig-leaf-rtm panels c-e) shows how light propagates through leaf layers. At each interface between materials with different refractive indices (typically air n=1 and cell wall material n≈1.4), light undergoes:
 
 1. **Specular reflection** at the surface (~4% of incident light)
 2. **Refraction** into the leaf interior following Snell's law
-3. **Absorption** by pigments (chlorophylls, carotenoids, anthocyanins, water)
+3. **Absorption** by pigments (e.g., chlorophylls, carotenoids, anthocyanins)
 4. **Scattering** at cell walls and air-cell interfaces
 5. **Multiple internal reflections** within the mesophyll structure
 
 **PROSPECT Model:**
 
-The most widely used leaf-level RTM is PROSPECT [@jacquemoud1990prospect; @feret2017prospect], which treats the leaf as a stack of N identical layers, each characterized by a refractive index and specific absorption coefficients. The model requires as inputs:
+The most widely used leaf-level RTM is PROSPECT [@jacquemoud1990prospect; @feret2017prospect], which treats the leaf as a stack of N identical layers, each characterized by a refractive index and specific absorption coefficients. The latest model requires as inputs (see the [PROSPECT tutorial](https://jbferet.gitlab.io/prospect/articles/prospect1.html)):
 
 - **N**: Leaf structure parameter (related to mesophyll thickness and compactness)
-- **C_ab**: Chlorophyll a+b content (μg/cm²)
-- **C_ar**: Carotenoid content (μg/cm²)  
-- **C_brown**: Brown pigments (arbitrary units)
-- **C_w**: Equivalent water thickness (g/cm² or cm)
-- **C_m**: Dry matter content (g/cm²)
-- **C_anth**: Anthocyanin content (μg/cm²) [in PROSPECT-D and later versions]
+- **CHL**: Chlorophyll a+b content (μg/cm²)
+- **CAR**: Carotenoid content (μg/cm²)  
+- **BROWN**: Brown pigments (arbitrary units)
+- **EWT**: Equivalent water thickness (g/cm² or cm)
+- **LDMC**: Dry matter content (g/cm²)
+- **ANT**: Anthocyanin content (μg/cm²) (in PROSPECT-D and later versions)
+- **LMA**: leaf mass per area (g/cm²) (only in PROSPECT-D)
+- **PROT**: proteins (g/cm²) (in PROSPECT-PRO and later versions)
+- **CBC**: carbon based constituents (g/cm²) (in PROSPECT-PRO and later versions)
+- **alpha**: maximum incidence angle relative to the normal defining the solid angle of incident light at the surface of leaf (degrees) (in PROSPECT-PRO and later versions)
 
 The model outputs hemispherical reflectance and transmittance spectra (typically 400-2500 nm), which serve as inputs to canopy-level models.
 
@@ -84,7 +88,7 @@ The PROSPECT model has evolved through several versions:
 - **PROSPECT** (1990): Original version with 4 parameters
 - **PROSPECT-5** (2008): Added brown pigments
 - **PROSPECT-D** (2017): Added anthocyanins [@feret2017prospect]
-- **PROSPECT-PRO** (2021): Improved protein absorption features
+- **PROSPECT-PRO** (2021): Improved protein absorption features [@feret2021prospect]
 
 Each version improves spectral fidelity and retrieval accuracy for specific compounds.
 :::
@@ -104,7 +108,7 @@ Canopy-level RTMs simulate light interaction within entire plant canopies or lan
 
 **Horizontal Heterogeneity:**
 
-- **Tree crowns**: Individual trees with species-specific architecture
+- **Tree crowns**: Individual trees with species-specific architecture and optical properties
 - **Canopy gaps**: Openings allowing direct sunlight to reach understory
 - **Topography**: Terrain elevation affecting local illumination geometry
 - **Mixed surfaces**: Combination of vegetation, water, bare soil
@@ -116,7 +120,7 @@ Canopy-level RTMs must account for multiple radiation pathways:
 1. **Direct solar radiation**: Unscattered photons from the sun
 2. **Diffuse sky radiance**: Light scattered by atmosphere before reaching canopy
 3. **Multiple scattering within canopy**: Photons bouncing between leaves, stems, ground
-4. **Atmospheric coupling**: Light exiting canopy, being scattered by atmosphere, and potentially re-entering
+4. **Atmospheric coupling**: Light exiting canopy, being scattered by atmosphere, and potentially re-entering canopy
 5. **Topographic effects**: Shadows, adjacency effects from nearby terrain
 
 **Model Inputs:**
@@ -124,17 +128,17 @@ Canopy-level RTMs must account for multiple radiation pathways:
 Canopy-level RTMs require comprehensive parameterization:
 
 - **Optical properties**: Leaf/bark/soil reflectance and transmittance spectra
-- **Structural parameters**: LAI (Leaf Area Index), canopy height, crown dimensions
-- **3D Architecture**: Tree positions, sizes, shapes; or turbid medium descriptions
-- **Environmental conditions**: Sun angles, atmospheric composition
-- **Sensor geometry**: View angles, spatial resolution, spectral bands
+- **Structural parameters** in case of simple tree parametrization**:** LAI (Leaf Area Index), leaf angle distribution, crown dimensions, tree positions
+- **3D Architecture** in case of detailed tree parametrization**:** Tree positions, 3D tree representations (3D objects)
+- **Environmental conditions**: Sun angles, atmospheric composition, scene location (longitude, latitude, altitude)
+- **Sensor geometry**: View angles, spatial and spectral resolution
 
 **Model Outputs:**
 
 These models generate various products:
 
 - **Bidirectional Reflectance Factor (BRF)**: Directional reflectance images
-- **Radiative budget**: Absorbed, transmitted, and reflected radiation
+- **Radiative budget**: Absorbed, transmitted, reflected, and emitted radiation
 - **LiDAR waveforms**: Simulated laser scanning returns
 - **Brightness temperature**: Thermal radiation (if thermal module enabled)
 
@@ -142,7 +146,7 @@ These models generate various products:
 
 RTMs can be categorized by their representation of canopy architecture:
 
-![Three levels of canopy representation in radiative transfer models. Left: 1D turbid medium with horizontally homogeneous layers. Center: 3D geometrical objects with simple crown shapes. Right: 3D complex representation with explicit 3D tree structures. Yellow arrows indicate incident direct solar radiation, with scattered radiation paths shown by dashed lines.](DART_figures/fig_model_complexity.png){#fig-model-complexity width="100%"}
+![Three levels of canopy representation in radiative transfer models. Left: 1D turbid medium with horizontally homogeneous layers. Center: 3D geometrical objects with simple crown shapes. Right: 3D complex representation with explicit 3D tree representations. Yellow arrows indicate incident direct solar radiation, with scattered radiation paths shown by dashed lines.](DART_figures/fig_model_complexity.png){#fig-model-complexity width="100%"}
 
 **1D Models (Turbid Medium):**
 
@@ -171,7 +175,7 @@ Don't dismiss 1D models as "too simple." They serve important purposes:
 - **Homogeneous vegetation** where added complexity provides minimal benefit
 - **Situations where "good enough" accuracy** suffices for the research question
 
-Sometimes a fast, simple model that you can run many times is more valuable than a slow, complex model with slightly better accuracy.
+Sometimes a fast, simple model that you can run many times is more valuable than a slower, complex model with slightly better accuracy.
 :::
 
 **3D Geometrical Models:**
@@ -183,7 +187,7 @@ Advantages:
 - Captures crown-scale structure and gaps
 - **More realistic than 1D for forests** while remaining tractable
 - **Moderate computational demands** - good balance of speed and accuracy
-- Don't require detailed 3D models of individual trees
+- Don't require detailed 3D representations (3D objects) of individual trees
 
 Limitations:
 
@@ -193,7 +197,7 @@ Limitations:
 
 **3D Complex Models:**
 
-The most sophisticated approach explicitly represents 3D tree architecture using detailed geometric meshes or voxelized structures (@fig-model-complexity, right panel). Examples include DART-Lux [@gastellu2017dart], LESS [@qi2019less], and Helios++ [@bailey2020helios]. 
+The most sophisticated approach explicitly represents 3D tree architecture using detailed geometric meshes or voxelized structures (@fig-model-complexity, right panel). Examples include DART [@gastellu2017dart, @malenovsky2021discrete], LESS [@qi2019less], and Helios++ [@winiwarter2022virtual]. 
 
 ::: callout-note
 ## 3D Model Input Formats
@@ -209,8 +213,8 @@ The choice between voxels and facets depends on your data source and the specifi
 Advantages:
 
 - Highest realism and accuracy
-- Can incorporate terrestrial laser scanning (TLS) data
-- Suitable for LiDAR simulation and fine-scale studies
+- Can incorporate terrestrial laser scanning (TLS) data (Helios++) and detailed 3D reconstructed forest scenes (3D objects)
+- Suitable for fine-scale studies
 
 Limitations:
 

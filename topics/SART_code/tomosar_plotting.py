@@ -3,6 +3,8 @@
 Functions for plotting TomoSAR results.
 @author: Xiao Liu
 E-mail: xiao.liu@mailbox.tu-dresden.de
+
+Modified version with full parametrization of figure sizes and DPI for all functions. Modifications made by Vojtěch Barták (bartakv@fzp.czu.cz).
 """
 
 import matplotlib.pyplot as plt
@@ -14,14 +16,50 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy.signal import find_peaks
 
 #%% define a function to adjust the colorbar
-def color_bar_fit (ax, im, size="5%"):
+def color_bar_fit(ax, im, size="5%", fontsize=12):
+    """
+    Helper function to adjust colorbar size and position.
     
+    Parameters:
+    -----------
+    ax : matplotlib axis
+        The axis to which the colorbar is added
+    im : matplotlib image
+        The image object for which the colorbar is created
+    size : str, optional
+        Size of the colorbar. Default: "5%"
+    fontsize : int, optional
+        Font size for colorbar tick labels. Default: 12
+    """
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size=size, pad=0.05)
-    return plt.colorbar(im, cax=cax)
+    cbar = plt.colorbar(im, cax=cax)
+    cbar.ax.tick_params(labelsize=fontsize)
+    return cbar
 
 #%% plot InSAR phase with/without flat-earth and topography phase
-def insar_quick_look(slc_1_id, slc_2_id, slc_stack, normalized_stack):
+def insar_quick_look(slc_1_id, slc_2_id, slc_stack, normalized_stack,
+                     figsize=(10, 4), dpi=150, fontsize=12):
+    """
+    Compare InSAR phase before and after removing topographic phase.
+    
+    Parameters:
+    -----------
+    slc_1_id : int
+        Index of first SLC image
+    slc_2_id : int
+        Index of second SLC image
+    slc_stack : ndarray
+        Stack of SLC images
+    normalized_stack : ndarray
+        Stack of phase-corrected SLC images
+    figsize : tuple, optional
+        Figure size in inches (width, height). Default: (10, 4)
+    dpi : int, optional
+        Figure resolution in dots per inch. Default: 150
+    fontsize : int, optional
+        Font size for labels, titles, and tick labels. Default: 12
+    """
     slc_1 = slc_stack[:,:,slc_1_id].squeeze()
     slc_2 = slc_stack[:,:,slc_2_id].squeeze()
 
@@ -31,68 +69,117 @@ def insar_quick_look(slc_1_id, slc_2_id, slc_stack, normalized_stack):
     insar_before = slc_1 * np.conj(slc_2)
     insar_after = norm_slc_1 * np.conj(norm_slc_2)
     
-    plt.figure(dpi = 300)
+    plt.figure(dpi=dpi, figsize=figsize)
     cmap = 'jet'
     
-    ax = plt.subplot(1, 2,1)
-    im = ax.imshow( np.angle(insar_before), cmap = cmap )
-    color_bar_fit (ax, im)
-    ax.set_title('With topographical phase')
+    ax = plt.subplot(1, 2, 1)
+    im = ax.imshow(np.angle(insar_before), cmap=cmap)
+    ax.set_title('With topographical phase', fontsize=fontsize)
+    ax.tick_params(axis='both', labelsize=fontsize)
+    color_bar_fit(ax, im, fontsize=fontsize)
     
     ax = plt.subplot(1, 2, 2)
-    im = ax.imshow( np.angle(insar_after), cmap = cmap)
-    color_bar_fit (ax, im)
-    ax.set_title('Without topographical phase')
+    im = ax.imshow(np.angle(insar_after), cmap=cmap)
+    ax.set_title('Without topographical phase', fontsize=fontsize)
+    ax.tick_params(axis='both', labelsize=fontsize)
+    color_bar_fit(ax, im, fontsize=fontsize)
     
     plt.tight_layout()
     
 #%% plot covariance matrix
-def cov_mat_plot(cov_mat, img_path):
-    n_track = int( cov_mat.shape[2] )
+def cov_mat_plot(cov_mat, img_path, figsize=(12, 12), dpi=150, fontsize=20):
+    """
+    Plot covariance matrix showing amplitude and phase for all track pairs.
     
-    fig = plt.figure(dpi = 300, figsize = (18, 18))
+    Parameters:
+    -----------
+    cov_mat : ndarray
+        Covariance matrix (rows, cols, tracks, tracks)
+    img_path : str
+        Output file path for saving the figure
+    figsize : tuple, optional
+        Figure size in inches (width, height). Default: (12, 12)
+    dpi : int, optional
+        Figure resolution in dots per inch. Default: 150
+    fontsize : int, optional
+        Font size for labels and titles. Default: 20
+    """
+    n_track = int(cov_mat.shape[2])
+    
+    fig = plt.figure(dpi=dpi, figsize=figsize)
     gs = fig.add_gridspec(n_track, n_track, hspace=0, wspace=0)
-    axs = gs.subplots() #sharex='col', sharey='row'
-    for r_id in tqdm( range(0,n_track) ):
-        axs[r_id, r_id].text(0.5, 0.5, 'Track {}'.format(r_id + 1), horizontalalignment='center',
-                             verticalalignment='center', transform=axs[r_id, r_id].transAxes,
-                             fontsize=30)
+    axs = gs.subplots()
+    
+    for r_id in tqdm(range(0, n_track)):
+        axs[r_id, r_id].text(0.5, 0.5, 'Track {}'.format(r_id + 1), 
+                             horizontalalignment='center',
+                             verticalalignment='center', 
+                             transform=axs[r_id, r_id].transAxes,
+                             fontsize=fontsize)
         axs[r_id, r_id].axis("off")
     
         for c_id in range(r_id + 1, n_track):
             img_1 = axs[r_id, c_id].imshow(np.abs(cov_mat[:,:,r_id, c_id].squeeze()),
-                                           cmap = 'Greys_r')#cmap = 'viridis')#'Greys_r'
-            img_2 = axs[c_id, r_id].imshow(np.angle(cov_mat[:,:,c_id, r_id].squeeze()), cmap = 'jet')
+                                           cmap = 'Greys_r',
+                                           vmin = 0, vmax = 1)
+            img_2 = axs[c_id, r_id].imshow(np.angle(cov_mat[:,:,c_id, r_id].squeeze()), 
+                                           cmap = 'jet',
+                                           vmin = -np.pi, vmax = np.pi)
             axs[r_id, c_id].axis("off")
             axs[c_id, r_id].axis("off")
     
     # adding the colorbar
-    cax_1 = fig.add_axes([1, 0.49, 0.03, 0.5]) #left, bottom, width, height 
-    cax_2 = fig.add_axes([-0.1, 0.01, 0.03, 0.5]) #left, bottom, width, height 
+    cax_1 = fig.add_axes([1, 0.49, 0.03, 0.5])
+    cax_2 = fig.add_axes([-0.1, 0.01, 0.03, 0.5])
     
-    bar_1 = fig.colorbar(img_1, ax=axs.ravel().tolist(), cax = cax_1)
-    bar_2 = fig.colorbar(img_2, ax=axs.ravel().tolist(), cax = cax_2)
+    bar_1 = fig.colorbar(img_1, ax=axs.ravel().tolist(), cax=cax_1)
+    bar_2 = fig.colorbar(img_2, ax=axs.ravel().tolist(), cax=cax_2)
     
     # change the font size of the colorbar labels
-    bar_1.ax.tick_params(labelsize=30)
-    bar_2.ax.tick_params(labelsize=30)
+    bar_1.ax.tick_params(labelsize=fontsize)
+    bar_2.ax.tick_params(labelsize=fontsize)
     
-    bar_1.ax.set_ylabel('Coherence_amplitude',fontsize=30)
-    bar_2.ax.set_ylabel('Coherence_phase',fontsize=30)
+    bar_1.ax.set_ylabel('Coherence_amplitude', fontsize=fontsize)
+    bar_2.ax.set_ylabel('Coherence_phase', fontsize=fontsize)
     
     plt.tight_layout() 
     
-    plt.savefig(img_path, dpi=300, bbox_inches='tight')
+    plt.savefig(img_path, dpi=dpi, bbox_inches='tight')
   
 #%% plot tomosar results
 def tomo_plot(rg, az, slc_stack, tomo_norm, height, pol, img_path, 
-              lidar_rh = np.zeros((1,1))
-              ):
+              lidar_rh=np.zeros((1,1)),
+              figsize=(10, 8), dpi=150, fontsize=12):
+    """
+    Plot comprehensive TomoSAR results including vertical profiles and slices.
     
+    Parameters:
+    -----------
+    rg : int
+        Range index for profile location
+    az : int
+        Azimuth index for profile location
+    slc_stack : ndarray
+        Stack of SLC images
+    tomo_norm : ndarray
+        Normalized tomographic reflectivity profiles
+    height : int
+        Maximum height for vertical axis (in meters)
+    pol : str
+        Polarization ('hh', 'hv', 'vv')
+    img_path : str
+        Output file path for saving the figure
+    lidar_rh : ndarray, optional
+        LiDAR canopy height for comparison. Default: empty array
+    figsize : tuple, optional
+        Figure size in inches (width, height). Default: (10, 8)
+    dpi : int, optional
+        Figure resolution in dots per inch. Default: 150
+    fontsize : int, optional
+        Font size for labels and titles. Default: 12
+    """
     # main plot setup
-    # set up the subplot layout
-    fig = plt.figure(dpi = 300, figsize=(12,10))
-    fontsize = 12
+    fig = plt.figure(dpi=dpi, figsize=figsize)
 
     # the horizontal slice plot
     ax1 = fig.add_subplot(221)
@@ -116,6 +203,7 @@ def tomo_plot(rg, az, slc_stack, tomo_norm, height, pol, img_path,
     ax2.set_title('Vertical point profiles, {}'.format(pol.upper()), fontsize=fontsize)
     ax2.set_xlim(0, 1)
     ax2.set_ylim(-height, height)
+    ax2.tick_params(axis='both', labelsize=fontsize)
     
     # add a cross-hair to the horizontal slice plot
     ax1.axhline(az, linewidth=4, color='w')
@@ -127,25 +215,29 @@ def tomo_plot(rg, az, slc_stack, tomo_norm, height, pol, img_path,
     subset_range = np.fliplr(tomo_norm[az, :, :])
     subset_azimuth = np.fliplr(tomo_norm[:, rg, :])
 
-    subset_layer = np.abs( slc_stack[:,:,0].squeeze() )# slc intensity
-    subset_layer = resize(subset_layer, (tomo_norm.shape[0], tomo_norm.shape[1]))#.astype('float32')
+    subset_layer = np.abs(slc_stack[:,:,0].squeeze())
+    subset_layer = resize(subset_layer, (tomo_norm.shape[0], tomo_norm.shape[1]))
     
     # plot the vertical profile
     label = 'rg: {}; az: {}'.format(rg, az)
     ax2.plot(subset_vertical, range(-height, height + 1), label=label)
-    ax2.legend(loc=0, prop={'size': 12}, markerscale=1)
+    ax2.legend(loc=0, prop={'size': fontsize}, markerscale=1)
     
     # plot the range slice
     im3 = ax3.imshow(np.rot90(subset_range, 1), origin='lower', cmap='jet', aspect='auto')
-    ax3.set_title('Range slice at azimuth line {}, {}'.format(az, pol.upper()), fontsize=fontsize)
+    ax3.set_title('Range slice at azimuth line {}, {}'.format(az, pol.upper()), 
+                  fontsize=fontsize)
+    ax3.tick_params(axis='both', labelsize=fontsize)
     
     # plot the azimuth slice
     im4 = ax4.imshow(np.rot90(subset_azimuth, 1), origin='lower', cmap='jet', aspect='auto')
-    ax4.set_title('Azimuth slice at range line {}, {}'.format(rg, pol.upper()), fontsize=fontsize)
+    ax4.set_title('Azimuth slice at range line {}, {}'.format(rg, pol.upper()), 
+                  fontsize=fontsize)
+    ax4.tick_params(axis='both', labelsize=fontsize)
     
     # change yaxis of ax3 and ax4 from bins to meters
     z_vector = np.arange(-height, height + 1, 1)
-    ticks = np.linspace(0, 2*height,6)
+    ticks = np.linspace(0, 2*height, 6)
     ticklabels = ["{:.0f}".format(z_vector[int(i)]) for i in ticks]
     
     ax3.set_yticks(ticks)
@@ -155,17 +247,19 @@ def tomo_plot(rg, az, slc_stack, tomo_norm, height, pol, img_path,
     ax3.set_ylabel('Height [m]', fontsize=fontsize)
     ax4.set_ylabel('Height [m]', fontsize=fontsize)
     
-    im1 = ax1.imshow(subset_layer, origin='upper', cmap='viridis',#cmap='Greys_r',
-                    vmin = np.percentile(subset_layer, 10),
-                    vmax = np.percentile(subset_layer, 90))# from top to down
+    im1 = ax1.imshow(subset_layer, origin='upper', cmap='viridis',
+                    vmin=np.percentile(subset_layer, 10),
+                    vmax=np.percentile(subset_layer, 90))
     
     ax1.set_xlabel('Range', fontsize=fontsize)
     ax1.set_ylabel('Azimuth', fontsize=fontsize)
-    ax1.set_title('Intensity of the reference SLC, {}'.format(pol.upper()), fontsize=fontsize)
+    ax1.set_title('Intensity of the reference SLC, {}'.format(pol.upper()), 
+                  fontsize=fontsize)
+    ax1.tick_params(axis='both', labelsize=fontsize)
     
-    color_bar_fit (ax1, im1)
-    color_bar_fit (ax3, im3, size='2%')
-    color_bar_fit (ax4, im4, size='2%')
+    color_bar_fit(ax1, im1, fontsize=fontsize)
+    color_bar_fit(ax3, im3, size='2%', fontsize=fontsize)
+    color_bar_fit(ax4, im4, size='2%', fontsize=fontsize)
     
     if lidar_rh.size > 1:
         lidar_rh = resize(lidar_rh, (tomo_norm.shape[0], tomo_norm.shape[1]))
@@ -173,24 +267,44 @@ def tomo_plot(rg, az, slc_stack, tomo_norm, height, pol, img_path,
         lidar_rh_azimuth = lidar_rh[:, rg].squeeze() + height
         each_lidar_rh = lidar_rh[az, rg]
         
-        ax2.axhline(each_lidar_rh, color='k', label = 'lidar' )#label = 'lidar'
+        ax2.axhline(each_lidar_rh, color='k', label='lidar')
+        ax3.plot(lidar_rh_range, linewidth=4, color='k', label='lidar')
+        ax4.plot(lidar_rh_azimuth, linewidth=4, color='k', label='lidar')
 
-        ax3.plot(lidar_rh_range,linewidth=4, color='k', label = 'lidar' )
-        ax4.plot(lidar_rh_azimuth,linewidth=4, color='k', label = 'lidar')
-
-        ax2.legend(loc=0, prop={'size': 12}, markerscale=1)        
-        ax3.legend(loc=0, prop={'size': 12}, markerscale=1)
-        ax4.legend(loc=0, prop={'size': 12}, markerscale=1)
+        ax2.legend(loc=0, prop={'size': fontsize}, markerscale=1)        
+        ax3.legend(loc=0, prop={'size': fontsize}, markerscale=1)
+        ax4.legend(loc=0, prop={'size': fontsize}, markerscale=1)
 
     plt.tight_layout(pad=1.0, w_pad=0.1, h_pad=0.1)
     
-    plt.savefig(img_path, dpi=300, bbox_inches='tight')
+    plt.savefig(img_path, dpi=dpi, bbox_inches='tight')
     
 #%% plot aggregated tomosar profiles in different forest height and agb
-def grouped_tomosar_profiles (tomo, lvis_rh, lvis_agb, z_vector, img_path):
-
-    fig = plt.figure(dpi = 300, figsize=(10,6))
-    fontsize = 12
+def grouped_tomosar_profiles(tomo, lvis_rh, lvis_agb, z_vector, img_path,
+                             figsize=(9, 5), dpi=150, fontsize=12):
+    """
+    Plot TomoSAR profiles aggregated by forest height and biomass classes.
+    
+    Parameters:
+    -----------
+    tomo : ndarray
+        Tomographic reflectivity profiles
+    lvis_rh : ndarray
+        LiDAR canopy height (RH100)
+    lvis_agb : ndarray
+        LiDAR above-ground biomass
+    z_vector : ndarray
+        Height vector for vertical axis
+    img_path : str
+        Output file path for saving the figure
+    figsize : tuple, optional
+        Figure size in inches (width, height). Default: (9, 5)
+    dpi : int, optional
+        Figure resolution in dots per inch. Default: 150
+    fontsize : int, optional
+        Font size for labels and titles. Default: 12
+    """
+    fig = plt.figure(dpi=dpi, figsize=figsize)
     
     ax1 = fig.add_subplot(121)
     ax2 = fig.add_subplot(122)
@@ -198,30 +312,30 @@ def grouped_tomosar_profiles (tomo, lvis_rh, lvis_agb, z_vector, img_path):
     # grouped by lvis height
     h_step = 10
     n_step = 5
-    nz=z_vector.shape[0]
+    nz = z_vector.shape[0]
      
     for h_id in range(n_step):
         h_start = h_id * h_step
-        h_end = (h_id+1) * h_step
+        h_end = (h_id + 1) * h_step
         
-        mask = np.where((lvis_rh >= h_start) & (lvis_rh < h_end) )
+        mask = np.where((lvis_rh >= h_start) & (lvis_rh < h_end))
     
         tomo_median = np.zeros_like(z_vector, dtype=np.float32)
         for layer in range(nz):
-            each_layer = np.squeeze( tomo[:,:,layer] )[mask]
-    
-            tomo_median[layer] = np.median(each_layer[each_layer>0])
+            each_layer = np.squeeze(tomo[:,:,layer])[mask]
+            tomo_median[layer] = np.median(each_layer[each_layer > 0])
                 
         label = '{}-{} m'.format(h_start, h_end)
-        ax1.plot( tomo_median,  z_vector, label = label) 
+        ax1.plot(tomo_median, z_vector, label=label) 
      
-    ax1.set_ylim(0,60)
+    ax1.set_ylim(0, 60)
     ax1.grid(alpha=0.5)
-    ax1.legend(bbox_to_anchor=(1.04, 0.25), loc="center left", borderaxespad=0,fontsize=fontsize)
-    ax1.set_xlabel('Reflectivity',fontsize=fontsize)
-    ax1.set_ylabel('Height (m)',fontsize=fontsize)
+    ax1.legend(bbox_to_anchor=(1.04, 0.25), loc="center left", 
+               borderaxespad=0, fontsize=fontsize)
+    ax1.set_xlabel('Reflectivity', fontsize=fontsize)
+    ax1.set_ylabel('Height (m)', fontsize=fontsize)
     ax1.tick_params(axis='both', labelsize=fontsize)
-    ax1.set_title('Grouped by lidar forest height')
+    ax1.set_title('Grouped by lidar forest height', fontsize=fontsize)
     
     # grouped by lvis agb
     agb_step = 100
@@ -229,86 +343,129 @@ def grouped_tomosar_profiles (tomo, lvis_rh, lvis_agb, z_vector, img_path):
     
     for agb_id in range(n_step):
         agb_start = agb_id * agb_step
-        agb_end = (agb_id+1) * agb_step
+        agb_end = (agb_id + 1) * agb_step
             
-        mask = np.where((lvis_agb >= agb_start) & (lvis_agb < agb_end) )
+        mask = np.where((lvis_agb >= agb_start) & (lvis_agb < agb_end))
     
         tomo_median = np.zeros_like(z_vector, dtype=np.float32)
         for layer in range(nz):
-            each_layer = np.squeeze( tomo[:,:,layer] )[mask]
-            tomo_median[layer] = np.median(each_layer[each_layer>0])
+            each_layer = np.squeeze(tomo[:,:,layer])[mask]
+            tomo_median[layer] = np.median(each_layer[each_layer > 0])
                 
         label = '{}-{} Mg/ha'.format(agb_start, agb_end)
-        ax2.plot( tomo_median,  z_vector, label = label) 
+        ax2.plot(tomo_median, z_vector, label=label) 
      
-    ax2.set_ylim(0,60)
+    ax2.set_ylim(0, 60)
     ax2.grid(alpha=0.5)
-    ax2.legend(bbox_to_anchor=(1.04, 0.25), loc="center left", borderaxespad=0,fontsize=fontsize)
-    ax2.set_xlabel('Reflectivity',fontsize=fontsize)
-    ax2.set_ylabel('Height (m)',fontsize=fontsize)
+    ax2.legend(bbox_to_anchor=(1.04, 0.25), loc="center left", 
+               borderaxespad=0, fontsize=fontsize)
+    ax2.set_xlabel('Reflectivity', fontsize=fontsize)
+    ax2.set_ylabel('Height (m)', fontsize=fontsize)
     ax2.tick_params(axis='both', labelsize=fontsize)
-    ax2.set_title('Grouped by lidar AGB')
+    ax2.set_title('Grouped by lidar AGB', fontsize=fontsize)
   
     plt.tight_layout()
-    plt.savefig(img_path, dpi=300, bbox_inches='tight')
+    plt.savefig(img_path, dpi=dpi, bbox_inches='tight')
 
 #%% compare tomosar phase centre with lidar height
-def tomosar_phase_centre(tomo, lvis_rh, z_vector, img_path):
-    low_bound = 0.3#0.3
+def tomosar_phase_centre(tomo, lvis_rh, z_vector, img_path,
+                         figsize=(10, 3), dpi=150, fontsize=12, low_bound=0.3):
+    """
+    Compare TomoSAR phase center height with LiDAR canopy height.
     
+    Parameters:
+    -----------
+    tomo : ndarray
+        Tomographic reflectivity profiles
+    lvis_rh : ndarray
+        LiDAR canopy height (RH100)
+    z_vector : ndarray
+        Height vector for vertical axis
+    img_path : str
+        Output file path for saving the figure
+    figsize : tuple, optional
+        Figure size in inches (width, height). Default: (10, 3)
+    dpi : int, optional
+        Figure resolution in dots per inch. Default: 150
+    fontsize : int, optional
+        Font size for labels, titles, and tick labels. Default: 12
+    low_bound : float, optional
+        Threshold for peak detection (fraction of max). Default: 0.3
+    """
     pha_c = np.zeros((tomo.shape[0], tomo.shape[1]))
     
     for i in tqdm(range(tomo.shape[0])):
         for j in range(tomo.shape[1]):
-            each_tomo = tomo[i,j,:]
+            each_tomo = tomo[i, j, :]
             peaks, _ = find_peaks(each_tomo, height=low_bound*np.nanmax(each_tomo)) 
     
-            if len(peaks)>0:
-                pha_c[i,j] = z_vector[peaks[-1]]# height
+            if len(peaks) > 0:
+                pha_c[i, j] = z_vector[peaks[-1]]
     
-    
-    mask = np.where((lvis_rh >= 0) & (lvis_rh < 60) )
+    mask = np.where((lvis_rh >= 0) & (lvis_rh < 60))
         
-    r = np.corrcoef(lvis_rh[mask], pha_c[mask])[0,1]
-    
     res = stats.pearsonr(lvis_rh[mask], pha_c[mask])
     r = res.statistic
     pvalue = res.pvalue
-
     r = round(r, 2)
     
-    fig = plt.figure(dpi = 300, figsize=(12,4))
+    fig = plt.figure(dpi=dpi, figsize=figsize)
     
-    ax1 = fig.add_subplot(131)#agb
-    ax2 = fig.add_subplot(132)#tomo_h
-    ax3 = fig.add_subplot(133)#agb vs tomo_h, scatter 
+    ax1 = fig.add_subplot(131)
+    ax2 = fig.add_subplot(132)
+    ax3 = fig.add_subplot(133)
     
-    im1 = ax1.imshow(lvis_rh, vmin = 0, vmax = 60)
-    ax1.set_title('LVIS RH100 (m)')
-    color_bar_fit (ax1, im1)
+    im1 = ax1.imshow(lvis_rh, vmin=0, vmax=60)
+    ax1.set_title('LVIS RH100 (m)', fontsize=fontsize)
+    ax1.tick_params(axis='both', labelsize=fontsize)
+    color_bar_fit(ax1, im1, fontsize=fontsize)
     
-    im2 = ax2.imshow(pha_c, vmin = 0, vmax = 60)
-    ax2.set_title('TomoSAR phase centre (m)')
-    color_bar_fit (ax2, im2)
+    im2 = ax2.imshow(pha_c, vmin=0, vmax=60)
+    ax2.set_title('TomoSAR phase centre (m)', fontsize=fontsize)
+    ax2.tick_params(axis='both', labelsize=fontsize)
+    color_bar_fit(ax2, im2, fontsize=fontsize)
     
-    im2 = ax3.scatter(lvis_rh[mask], pha_c[mask], s=1)
+    im3 = ax3.scatter(lvis_rh[mask], pha_c[mask], s=1)
     if pvalue > 0.01:
-        print(ax3.set_title('r={}, p>0.01'.format(r)))
+        ax3.set_title('r={}, p>0.01'.format(r), fontsize=fontsize)
     else:
-        print(ax3.set_title('r={}, p<=0.01'.format(r)))    
+        ax3.set_title('r={}, p<=0.01'.format(r), fontsize=fontsize)
             
-    ax3.axline((0,0), slope=1, color='black')
-    ax3.set_xlim(0,60)
-    ax3.set_ylim(0,60)
-    ax3.set_xlabel('LVIS RH100 (m)')
-    ax3.set_ylabel('TomoSAR phase centre (m)')
+    ax3.axline((0, 0), slope=1, color='black')
+    ax3.set_xlim(0, 60)
+    ax3.set_ylim(0, 60)
+    ax3.set_xlabel('LVIS RH100 (m)', fontsize=fontsize)
+    ax3.set_ylabel('TomoSAR phase centre (m)', fontsize=fontsize)
+    ax3.tick_params(axis='both', labelsize=fontsize)
     
     plt.tight_layout()
-    plt.savefig(img_path, dpi=300, bbox_inches='tight')
+    plt.savefig(img_path, dpi=dpi, bbox_inches='tight')
     
 #%% compare agb with tomosar reflectivity at different height layers
-def tomosar_layerd_reflectivity (tomo, lvis_agb, min_agb, height, img_path):
-
+def tomosar_layerd_reflectivity(tomo, lvis_agb, min_agb, height, img_path,
+                                figsize=(10, 3), dpi=150, fontsize=12):
+    """
+    Compare TomoSAR reflectivity at different height layers with LiDAR biomass.
+    
+    Parameters:
+    -----------
+    tomo : ndarray
+        Tomographic reflectivity profiles
+    lvis_agb : ndarray
+        LiDAR above-ground biomass
+    min_agb : float
+        Minimum AGB threshold for analysis (Mg/ha)
+    height : int
+        Zero-height index in the profile
+    img_path : str
+        Base path for saving figures (will append height suffix)
+    figsize : tuple, optional
+        Figure size in inches (width, height). Default: (10, 3)
+    dpi : int, optional
+        Figure resolution in dots per inch. Default: 150
+    fontsize : int, optional
+        Font size for labels, titles, and tick labels. Default: 12
+    """
     mask = np.where(lvis_agb >= min_agb)
 
     for h in range(0, 60, 15):
@@ -318,40 +475,64 @@ def tomosar_layerd_reflectivity (tomo, lvis_agb, min_agb, height, img_path):
         res = stats.pearsonr(lvis_agb[mask], subset_layer[mask])
         r = res.statistic
         pvalue = res.pvalue
-        
         r = round(r, 2)
     
-        fig = plt.figure(dpi = 300, figsize=(12,4))
+        fig = plt.figure(dpi=dpi, figsize=figsize)
     
-        ax1 = fig.add_subplot(131)#agb
-        ax2 = fig.add_subplot(132)#tomo_h
-        ax3 = fig.add_subplot(133)#agb vs tomo_h, scatter 
+        ax1 = fig.add_subplot(131)
+        ax2 = fig.add_subplot(132)
+        ax3 = fig.add_subplot(133)
         
-        im1 = ax1.imshow(lvis_agb, vmin = min_agb, vmax = 600)
-        ax1.set_title('LVIS AGB (Mg/ha)')
-        color_bar_fit (ax1, im1)
+        im1 = ax1.imshow(lvis_agb, vmin=min_agb, vmax=600)
+        ax1.set_title('LVIS AGB (Mg/ha)', fontsize=fontsize)
+        ax1.tick_params(axis='both', labelsize=fontsize)
+        color_bar_fit(ax1, im1, fontsize=fontsize)
     
         im2 = ax2.imshow(subset_layer)
-        ax2.set_title('TomoSAR reflectivity at {} m'.format(h))
-        color_bar_fit (ax2, im2)
+        ax2.set_title('TomoSAR reflectivity at {} m'.format(h), fontsize=fontsize)
+        ax2.tick_params(axis='both', labelsize=fontsize)
+        color_bar_fit(ax2, im2, fontsize=fontsize)
         
-        im2 = ax3.scatter(lvis_agb[mask], subset_layer[mask], s=1)
+        im3 = ax3.scatter(lvis_agb[mask], subset_layer[mask], s=1)
         if pvalue > 0.01:
-            print(ax3.set_title('r={}, p>0.01'.format(r)))
+            ax3.set_title('r={}, p>0.01'.format(r), fontsize=fontsize)
         else:
-            print(ax3.set_title('r={}, p<=0.01'.format(r)))
+            ax3.set_title('r={}, p<=0.01'.format(r), fontsize=fontsize)
             
-        ax3.set_xlabel('AGB (Mg/ha)')
-        ax3.set_ylabel('Reflectivity')
+        ax3.set_xlabel('AGB (Mg/ha)', fontsize=fontsize)
+        ax3.set_ylabel('Reflectivity', fontsize=fontsize)
+        ax3.tick_params(axis='both', labelsize=fontsize)
         
         plt.tight_layout()
         
-        img_path = img_path + '_{}m.png'.format(h)
-        plt.savefig(img_path, dpi=300, bbox_inches='tight')
+        output_path = img_path + '_{}m.png'.format(h)
+        plt.savefig(output_path, dpi=dpi, bbox_inches='tight')
 
 #%% look at the data: slc intensity, phase, kz, topographical phase        
-def quick_look (slc_id, slc_stack, kz_stack, phase_stack, img_path):
+def quick_look(slc_id, slc_stack, kz_stack, phase_stack, img_path,
+               figsize=(8, 6), dpi=150, fontsize=12):
+    """
+    Display quick look of SAR data: amplitude, phase, kz, and correction term.
     
+    Parameters:
+    -----------
+    slc_id : int
+        Index of the SLC image to display
+    slc_stack : ndarray
+        Stack of SLC images
+    kz_stack : ndarray
+        Stack of vertical wavenumber values
+    phase_stack : ndarray
+        Stack of topographic phase correction terms
+    img_path : str
+        Output file path for saving the figure
+    figsize : tuple, optional
+        Figure size in inches (width, height). Default: (8, 6)
+    dpi : int, optional
+        Figure resolution in dots per inch. Default: 150
+    fontsize : int, optional
+        Font size for labels, titles, and tick labels. Default: 12
+    """
     slc_subset = slc_stack[:,:,slc_id].squeeze()
     kz_subset = kz_stack[:,:,slc_id].squeeze()
     phase_subset = phase_stack[:,:,slc_id].squeeze()
@@ -359,31 +540,36 @@ def quick_look (slc_id, slc_stack, kz_stack, phase_stack, img_path):
     slc_amp = np.abs(slc_subset)
     slc_pha = np.angle(slc_subset)
     
-    fontsize = 12
-    plt.figure(dpi = 300, figsize = (8,8))
+    plt.figure(dpi=dpi, figsize=figsize)
     
     ax = plt.subplot(221)
-    im = plt.imshow(slc_amp, cmap = 'Greys_r', 
-                    vmin = np.percentile(slc_amp, 10),
-                    vmax = np.percentile(slc_amp, 90))
+    im = plt.imshow(slc_amp, cmap='Greys_r', 
+                    vmin=np.percentile(slc_amp, 10),
+                    vmax=np.percentile(slc_amp, 90))
     ax.set_title('Track {}, amplitude'.format(slc_id), fontsize=fontsize)
-    color_bar_fit (ax, im)
+    ax.tick_params(axis='both', labelsize=fontsize)
+    color_bar_fit(ax, im, fontsize=fontsize)
     
     ax = plt.subplot(222)
-    im = plt.imshow(slc_pha, cmap = 'jet')
+    im = plt.imshow(slc_pha, cmap='jet')
     ax.set_title('Track {}, phase (rad)'.format(slc_id), fontsize=fontsize)
-    color_bar_fit (ax, im)
+    ax.tick_params(axis='both', labelsize=fontsize)
+    color_bar_fit(ax, im, fontsize=fontsize)
     
     ax = plt.subplot(223)
-    im = plt.imshow(kz_subset, cmap = 'jet')
-    ax.set_title('Track {}, vertical wavenumber (rad/m)'.format(slc_id), fontsize=fontsize)
-    color_bar_fit (ax, im)
+    im = plt.imshow(kz_subset, cmap='jet')
+    ax.set_title('Track {}, vertical wavenumber (rad/m)'.format(slc_id), 
+                 fontsize=fontsize)
+    ax.tick_params(axis='both', labelsize=fontsize)
+    color_bar_fit(ax, im, fontsize=fontsize)
     
     ax = plt.subplot(224)
-    im = plt.imshow(phase_subset, cmap = 'jet')
-    ax.set_title('Track {}, phase correction term (rad)'.format(slc_id), fontsize=fontsize)
-    color_bar_fit (ax, im)
+    im = plt.imshow(phase_subset, cmap='jet')
+    ax.set_title('Track {}, phase correction term (rad)'.format(slc_id), 
+                 fontsize=fontsize)
+    ax.tick_params(axis='both', labelsize=fontsize)
+    color_bar_fit(ax, im, fontsize=fontsize)
     
     plt.tight_layout()
     
-    plt.savefig(img_path, dpi=300, bbox_inches='tight')
+    plt.savefig(img_path, dpi=dpi, bbox_inches='tight')

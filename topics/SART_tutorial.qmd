@@ -17,7 +17,7 @@ format:
 execute:
   warning: false
   message: false
-  freeze: auto
+  freeze: false
   fig-width: 8        # Default width in inches
   fig-height: 6       # Default height in inches
   fig-dpi: 150        # Resolution (default is 96)
@@ -33,7 +33,7 @@ This tutorial demonstrates SAR tomography (TomoSAR) analysis of tropical forests
 
 This script is developed based on the [TomoSAR tutorial from EO-College](https://github.com/EO-College/tomography_tutorial).
 
-**Data**: [F-SAR P-band TomoSAR data from AfriSAR 2016 campaign](https://drive.google.com/file/d/1doPzrqisD89UNam_vDvuS2lbamiHLVqB/view?usp=sharing)
+**Data link**: [F-SAR P-band TomoSAR data from AfriSAR 2016 campaign](https://drive.google.com/file/d/13m59hn_VznG60dsMuDVCusX8mlj7xGzg/view?usp=sharing)
 
 **Study site**: Lopé National Park, Gabon 
 
@@ -115,7 +115,7 @@ from tomosar_plotting import cov_mat_plot, tomo_plot, \
 ::: callout-important
 ## Required Functions
 
-These custom functions handle the core TomoSAR processing pipeline. Ensure the [`tomosar_toolbox.py`](https://drive.google.com/file/d/1eVjhHKqqHK4Ms9rOucT8eh3jUndSGkm8/view?usp=sharing) and [`tomosar_plotting.py`](https://drive.google.com/file/d/1FbiR-9WB3f8vX8aZm3Jy4icaEuwMT_jH/view?usp=sharing) modules are in your workspace directory.
+These custom functions handle the core TomoSAR processing pipeline. Ensure the [`tomosar_toolbox.py`](https://drive.google.com/file/d/1eVjhHKqqHK4Ms9rOucT8eh3jUndSGkm8/view?usp=sharing) and [`tomosar_plotting.py`](https://drive.google.com/file/d/11GulxuwVdH71_D7K3wEXOPWTi9yP79w0/view?usp=sharing) modules are in your workspace directory.
 :::
 
 ## Part 2: Parameter Configuration
@@ -217,7 +217,7 @@ Visualize the SAR intensity, phase, vertical wavenumber, and topographic phase:
 slc_id = 3
 img_path = os.path.join(outpath, 'Track_{}_quick_look.png'.format(slc_id))         
 quick_look(slc_id, slc_stack, kz_stack, phase_stack, img_path,
-          figsize=(10, 8), dpi=150, fontsize=12)
+          figsize=(5, 4), dpi=150, fontsize=7)
 ```
 
 ## Part 4: Phase Calibration
@@ -298,7 +298,7 @@ Compare the interferometric phase before and after calibration:
 
 slc_1_id, slc_2_id = 1, 3
 insar_quick_look(slc_1_id, slc_2_id, slc_stack, normalized_stack,
-                figsize=(12, 5), dpi=150)
+                figsize=(6, 4), dpi=150, fontsize=9)
 ```
 
 ## Part 5: Covariance Matrix Computation
@@ -341,7 +341,7 @@ Display the covariance matrix structure:
 
 img_path = os.path.join(outpath, '{}_covariance_matrix_quick_look.png'.format(pol))
 cov_mat_plot(covariance_matrix, img_path,
-            figsize=(10, 10), dpi=150, fontsize=18)
+            figsize=(4, 4), dpi=150, fontsize=9)
 ```
 
 ## Part 6: Tomographic Inversion
@@ -396,7 +396,7 @@ rg_ratio, az_ratio = 0.5, 0.6
 rg, az = int(rg_ratio * tomo_norm.shape[1]), int(az_ratio * tomo_norm.shape[0])
 img_path = os.path.join(outpath, '{}_tomosar_example_az_{}_rg_{}_{}.png'.format(pol, az, rg, tomo_method))
 tomo_plot(rg, az, slc_stack, tomo_norm, height, pol, img_path,
-         figsize=(10, 8), dpi=150, fontsize=12)
+         figsize=(5, 4), dpi=150, fontsize=7)
 ```
 
 ::: callout-important
