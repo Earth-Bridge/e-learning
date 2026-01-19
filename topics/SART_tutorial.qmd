@@ -17,7 +17,7 @@ format:
 execute:
   warning: false
   message: false
-  freeze: false
+  freeze: auto
   fig-width: 8        # Default width in inches
   fig-height: 6       # Default height in inches
   fig-dpi: 150        # Resolution (default is 96)
@@ -35,12 +35,12 @@ This script is developed based on the [TomoSAR tutorial from EO-College](https:/
 
 **Data link**: [F-SAR P-band TomoSAR data from AfriSAR 2016 campaign](https://drive.google.com/file/d/13m59hn_VznG60dsMuDVCusX8mlj7xGzg/view?usp=sharing)
 
-**Study site**: Lopé National Park, Gabon 
+**Study site**: Lopé National Park, Gabon
 
 **Data sources**:
 
-- SAR data: <https://earth.esa.int/eogateway/campaigns/afrisar-2016>
-- LiDAR data: <https://lvis.gsfc.nasa.gov/Data/Maps/Gabon2016Map.html>
+-   SAR data: <https://earth.esa.int/eogateway/campaigns/afrisar-2016>
+-   LiDAR data: <https://lvis.gsfc.nasa.gov/Data/Maps/Gabon2016Map.html>
 
 **Contact**: xiao.liu\@tu-dresden.de
 :::
@@ -526,22 +526,22 @@ if terrain_cor_flag == 1:
 ::: panel-tabset
 ## Key Takeaways
 
-**Data Preprocessing** 
+**Data Preprocessing**
 
-- Multi-baseline SAR data requires careful phase calibration 
-- Terrain correction is essential for accurate height estimation 
-- Multi-looking balances noise reduction and spatial resolution
+-   Multi-baseline SAR data requires careful phase calibration
+-   Terrain correction is essential for accurate height estimation
+-   Multi-looking balances noise reduction and spatial resolution
 
-**Tomographic Inversion** 
+**Tomographic Inversion**
 
-- Capon beamformer provides better vertical resolution than conventional methods 
-- Vertical profiles reveal ground and canopy structure
+-   Capon beamformer provides better vertical resolution than conventional methods
+-   Vertical profiles reveal ground and canopy structure
 
-**Comparison Results** 
+**Comparison Results**
 
-- TomoSAR profiles are sensitive to different forest height and biomass groups 
-- Penetration depth varies with polarization and forest density 
-- Biomass estimation benefits from multi-layer information
+-   TomoSAR profiles are sensitive to different forest height and biomass groups
+-   Penetration depth varies with polarization and forest density
+-   Biomass estimation benefits from multi-layer information
 
 ## Best Practices
 

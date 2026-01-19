@@ -26,8 +26,12 @@ website:
             href: topics/DART_tutorial.qmd
       - text: "RADAR Basics"
         menu:
+          - text: "Intro"
+            href: topics/RADAR_intro.qmd
           - text: "Theory"
             href: topics/RADAR_theory.qmd
+          - text: "Practice"
+            href: topics/RADAR_tutorial.qmd
       - text: "SAR Tomography"
         menu:
           - text: "Intro"
