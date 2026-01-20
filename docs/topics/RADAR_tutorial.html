@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="RADAR Tutorial">
-<meta name="dcterms.date" content="2026-01-19">
+<meta name="dcterms.date" content="2026-01-20">
 
 <title>Water Cloud Model for Sentinel-1 Backscatter Prediction – Remote Sensing of Forests</title>
 <style>
@@ -4198,7 +4198,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 19, 2026</p>
+      <p class="date">January 20, 2026</p>
     </div>
   </div>
   
@@ -4779,7 +4779,13 @@ memory usage: 10.7 KB</code></pre>
 <li>Lower D → weaker effect of SWC variability</li>
 </ul></li>
 </ol>
-<p><strong>Practical tips:</strong> - Change parameters one at a time - Try ±50% of the initial value first - Observe both RMSE and visual fit to the time series - Record your best parameter combination</p>
+<p><strong>Practical tips:</strong></p>
+<ul>
+<li>Change parameters one at a time</li>
+<li>Try ±50% of the initial value first</li>
+<li>Observe both RMSE and visual fit to the time series</li>
+<li>Record your best parameter combination</li>
+</ul>
 </div>
 </div>
 </section>
@@ -4816,8 +4822,17 @@ memory usage: 10.7 KB</code></pre>
 </div>
 <div class="callout-body-container callout-body">
 <p>A recent analysis examined Sentinel-1 observations following a forest fire in a Czech national park. The study revealed important insights about C-band radar limitations in forested environments:</p>
-<p><strong>Detection capabilities:</strong> - Significant backscatter changes were observed in grassland areas where fire removed all vegetation - VH polarization showed reduced backscatter in burned grassland areas, enabling change detection</p>
-<p><strong>Limitations in forest environments:</strong> - Residual forest structure (standing dead trunks and major branches) continued to produce polarimetric scattering after the fire - Detectable changes were primarily confined to grassland areas rather than forest plots - C-band wavelength has limited penetration into dense forest structure, making it challenging to detect understory changes</p>
+<p><strong>Detection capabilities:</strong></p>
+<ul>
+<li>Significant backscatter changes were observed in grassland areas where fire removed all vegetation</li>
+<li>VH polarization showed reduced backscatter in burned grassland areas, enabling change detection</li>
+</ul>
+<p><strong>Limitations in forest environments:</strong> ¨</p>
+<ul>
+<li>Residual forest structure (standing dead trunks and major branches) continued to produce polarimetric scattering after the fire</li>
+<li>Detectable changes were primarily confined to grassland areas rather than forest plots</li>
+<li>C-band wavelength has limited penetration into dense forest structure, making it challenging to detect understory changes</li>
+</ul>
 <p><strong>Implications for modeling:</strong> This case demonstrates that while the Water Cloud Model can predict backscatter over intact forests, disturbances such as fire may leave structural elements (trunks, branches) that continue to influence the radar signal. Complete removal of vegetation, as occurs in grasslands, produces more detectable changes in C-band observations.</p>
 <p><strong>Study site characteristics:</strong> The affected area now exhibits distinct zones: healthy forest, bark beetle-damaged forest, and fire-affected areas, providing a natural laboratory for studying radar responses to different disturbance types.</p>
 </div>
@@ -4833,8 +4848,20 @@ memory usage: 10.7 KB</code></pre>
 </div>
 <div class="callout-body-container callout-body">
 <p>Modern cloud-based platforms enable efficient radar data access and processing without requiring local data downloads:</p>
-<p><strong>Cloud-based platforms:</strong> - <a href="https://planetarycomputer.microsoft.com/">Microsoft Planetary Computer</a> - Direct API access to analysis-ready data - <a href="https://dataspace.copernicus.eu/">Copernicus Data Space</a> - Official ESA data hub - <a href="https://search.asf.alaska.edu/">Alaska Satellite Facility</a> - Specialized SAR archive - <a href="https://earthengine.google.com/">Google Earth Engine</a> - Cloud-based geospatial processing</p>
-<p><strong>Key advantages:</strong> - Direct access to pre-processed RTC products - Server-side processing capabilities - No local storage constraints - Streamlined time series analysis workflows</p>
+<p><strong>Cloud-based platforms:</strong></p>
+<ul>
+<li><a href="https://planetarycomputer.microsoft.com/">Microsoft Planetary Computer</a> - Direct API access to analysis-ready data</li>
+<li><a href="https://dataspace.copernicus.eu/">Copernicus Data Space</a> - Official ESA data hub</li>
+<li><a href="https://search.asf.alaska.edu/">Alaska Satellite Facility</a> - Specialized SAR archive</li>
+<li><a href="https://earthengine.google.com/">Google Earth Engine</a> - Cloud-based geospatial processing</li>
+</ul>
+<p><strong>Key advantages:</strong></p>
+<ul>
+<li>Direct access to pre-processed RTC products</li>
+<li>Server-side processing capabilities</li>
+<li>No local storage constraints</li>
+<li>Streamlined time series analysis workflows</li>
+</ul>
 <p><strong>Critical requirement:</strong> Always utilize RTC (Radiometric Terrain Corrected) products to minimize terrain-induced backscatter variations and ensure measurements primarily reflect surface properties and vegetation characteristics.</p>
 </div>
 </div>
@@ -4845,20 +4872,70 @@ memory usage: 10.7 KB</code></pre>
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href>Key Takeaways</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href>Best Practices</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href>Exercises</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<p><strong>Water Cloud Model:</strong> - Semi-empirical model separating vegetation and soil backscatter contributions - Requires calibration of four parameters (A, B, C, D) for specific vegetation types - Works better for some vegetation types than others</p>
-<p><strong>Sentinel-1 Characteristics:</strong> - <strong>VH polarization</strong> is more sensitive to vegetation structure than VV - <strong>RTC products</strong> are essential for reliable results - <strong>Speckle</strong> can be reduced by temporal/spatial averaging - <strong>Don’t mix orbits</strong> - ascending and descending see different aspects</p>
+<p><strong>Water Cloud Model:</strong></p>
+<ul>
+<li>Semi-empirical model separating vegetation and soil backscatter contributions</li>
+<li>Requires calibration of four parameters (A, B, C, D) for specific vegetation types</li>
+<li>Works better for some vegetation types than others</li>
+</ul>
+<p><strong>Sentinel-1 Characteristics:</strong></p>
+<ul>
+<li><strong>VH polarization</strong> is more sensitive to vegetation structure than VV</li>
+<li><strong>RTC products</strong> are essential for reliable results</li>
+<li><strong>Speckle</strong> can be reduced by temporal/spatial averaging</li>
+<li><strong>Don’t mix orbits</strong> - ascending and descending see different aspects</li>
+</ul>
 <p><strong>Parameter Influences:</strong> - <strong>LAI</strong>: Affects amount of scattering elements - <strong>LFMC</strong>: Influences dielectric properties and backscatter strength - <strong>SWC</strong>: Controls soil component backscatter</p>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p><strong>When working with Sentinel-1:</strong> - Always verify you’re using RTC products to ensure terrain effects are minimized - Avoid combining ascending and descending orbits due to different observation geometries - Apply median or mean filtering to reduce speckle in time series analysis - Validate model outputs with independent measurements when available - Consider temporal or spatial aggregation to improve signal-to-noise ratio in forested areas</p>
-<p><strong>When calibrating WCM:</strong> - Initialize with published parameter values for similar vegetation types and conditions - Employ systematic calibration approaches, varying parameters individually - Utilize independent validation datasets to assess model generalizability - Maintain comprehensive documentation of calibration procedures and results - Recognize that temporal or spatial averaging may be necessary to reduce noise and reveal underlying patterns in dense vegetation</p>
+<p><strong>When working with Sentinel-1:</strong></p>
+<ul>
+<li>Always verify you’re using RTC products to ensure terrain effects are minimized</li>
+<li>Avoid combining ascending and descending orbits due to different observation geometries</li>
+<li>Apply median or mean filtering to reduce speckle in time series analysis</li>
+<li>Validate model outputs with independent measurements when available</li>
+<li>Consider temporal or spatial aggregation to improve signal-to-noise ratio in forested areas</li>
+</ul>
+<p><strong>When calibrating WCM:</strong></p>
+<ul>
+<li>Initialize with published parameter values for similar vegetation types and conditions</li>
+<li>Employ systematic calibration approaches, varying parameters individually</li>
+<li>Utilize independent validation datasets to assess model generalizability</li>
+<li>Maintain comprehensive documentation of calibration procedures and results</li>
+<li>Recognize that temporal or spatial averaging may be necessary to reduce noise and reveal underlying patterns in dense vegetation</li>
+</ul>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
-<p><strong>1. Polarization Comparison</strong> - Calibrate WCM for both VV and VH polarizations - Compare optimal parameters and RMSE - Which polarization fits the model better?</p>
-<p><strong>2. Seasonal Analysis</strong> - Split data into winter and summer seasons - Calibrate separately for each season - Do optimal parameters differ between seasons?</p>
-<p><strong>3. Sensitivity Analysis</strong> - Systematically vary each parameter in small steps - Create plots of RMSE vs. parameter value - Which parameter has the strongest influence on model fit?</p>
-<p><strong>4. Model Simplification</strong> - Try simplified model versions (e.g., constant SWC) - How much does RMSE increase? - Is the full model complexity necessary?</p>
-<p><strong>5. Cross-Validation</strong> - Split data into calibration (70%) and validation (30%) sets - Calibrate on training data, test on validation data - Does the model generalize well?</p>
+<p><strong>1. Polarization Comparison</strong></p>
+<ul>
+<li>Calibrate WCM for both VV and VH polarizations</li>
+<li>Compare optimal parameters and RMSE</li>
+<li>Which polarization fits the model better?</li>
+</ul>
+<p><strong>2. Seasonal Analysis</strong></p>
+<ul>
+<li>Split data into winter and summer seasons</li>
+<li>Calibrate separately for each season</li>
+<li>Do optimal parameters differ between seasons?</li>
+</ul>
+<p><strong>3. Sensitivity Analysis</strong></p>
+<ul>
+<li>Systematically vary each parameter in small steps</li>
+<li>Create plots of RMSE vs. parameter value</li>
+<li>Which parameter has the strongest influence on model fit?</li>
+</ul>
+<p><strong>4. Model Simplification</strong></p>
+<ul>
+<li>Try simplified model versions (e.g., constant SWC)</li>
+<li>How much does RMSE increase?</li>
+<li>Is the full model complexity necessary?</li>
+</ul>
+<p><strong>5. Cross-Validation</strong></p>
+<ul>
+<li>Split data into calibration (70%) and validation (30%) sets</li>
+<li>Calibrate on training data, test on validation data</li>
+<li>Does the model generalize well?</li>
+</ul>
 </div>
 </div>
 </div>
@@ -4883,8 +4960,20 @@ memory usage: 10.7 KB</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Model Limitations:</strong> - C-band (Sentinel-1) has limited forest penetration - Model assumes homogeneous vegetation within pixel - Parameters may vary seasonally and with vegetation type - Structural elements (trunks, large branches) persist even after disturbances</p>
-<p><strong>Data Quality:</strong> - Use only RTC products - Check for temporal decorrelation - Be aware of speckle effects - Consider multi-temporal averaging for stable estimates</p>
+<p><strong>Model Limitations:</strong></p>
+<ul>
+<li>C-band (Sentinel-1) has limited forest penetration</li>
+<li>Model assumes homogeneous vegetation within pixel</li>
+<li>Parameters may vary seasonally and with vegetation type</li>
+<li>Structural elements (trunks, large branches) persist even after disturbances</li>
+</ul>
+<p><strong>Data Quality:</strong></p>
+<ul>
+<li>Use only RTC products</li>
+<li>Check for temporal decorrelation</li>
+<li>Be aware of speckle effects</li>
+<li>Consider multi-temporal averaging for stable estimates</li>
+</ul>
 </div>
 </div>
 <hr>
