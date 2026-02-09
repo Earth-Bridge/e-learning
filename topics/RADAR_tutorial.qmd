@@ -727,3 +727,5 @@ Success with WCM requires understanding its limitations, careful calibration, an
 *This tutorial provides hands-on experience with radar backscatter modeling. The Water Cloud Model serves as a foundation for understanding radar-vegetation interactions and can be extended with more sophisticated approaches for specific applications.*
 
 ------------------------------------------------------------------------
+
+![](logos.png)

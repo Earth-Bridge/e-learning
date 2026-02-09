@@ -13,9 +13,9 @@ The course is structured into thematic chapters covering key domains of forest r
 
 - [Hyperspectral Remote Sensing](topics/hyperspectral_intro.qmd)
 - [Radiative Transfer Modelling](topics/DART_intro.qmd)
-- [Radar Remote Sensing]()
+- [Radar Remote Sensing](topics/RADAR_intro.qmd)
 - [SAR Tomography](topics/SART_intro.qmd)
-- [ALS Processing ]()
+- [ALS Processing ](topics/ALS_intro.qmd)
 
 Each chapter combines:
 
