@@ -1,6 +1,6 @@
 ---
 title: "DART Forest Scene Setup Tutorial"
-author: "DART Tutorial"
+author: "Růžena Janoutová"
 date: today
 format:
   html:
@@ -22,7 +22,7 @@ editor: visual
 
 ## Overview
 
-This tutorial provides a step-by-step guide for setting up a forest scene simulation in DART (Discrete Anisotropic Radiative Transfer). DART is a comprehensive 3D radiative transfer model designed for simulating radiative budget and remote sensing acquisitions of natural and urban landscapes. This tutorial focuses on creating a high-resolution forest scene with detailed 3D tree models and proper optical properties.
+This tutorial provides a step-by-step guide for setting up a forest scene simulation in DART (Discrete Anisotropic Radiative Transfer). DART is a comprehensive 3D radiative transfer model designed for simulating radiative budget and remote sensing acquisitions of natural and urban landscapes. This tutorial focuses on creating a high-resolution forest scene with detailed 3D tree representations (3D objects) and proper optical properties.
 
 ## Prerequisites
 
@@ -36,7 +36,7 @@ Before starting this tutorial, ensure you have:
 ::: callout-note
 ## About DART
 
-DART is developed by the CESBIO laboratory (Centre d'Etudes Spatiales de la BIOsphère) and provides both forward and inverse modeling capabilities for optical remote sensing. For more information, visit the [DART manual](https://dart.omp.eu/).
+DART is developed by the CESBIO laboratory (Centre d'Etudes Spatiales de la BIOsphère) and provides both forward and inverse modeling capabilities for optical remote sensing. For more information, visit the [DART pages](https://dart.omp.eu/) or the [DART manual](https://dart.omp.eu/Public/documentation/contenu/documentation/DART_User_Manual.pdf).
 :::
 
 ## Part 1: Initial Setup
@@ -53,7 +53,7 @@ Extract the [`DART_forest_scene.zip`](https://drive.google.com/file/d/1ilGapx6Ho
 -   `DART/database` ← Copy database files here
 -   `DART/user_data` ← Copy other files here (except input folder)
 
-This ensures all necessary optical properties, 3D models, and configuration files are in the correct locations.
+This ensures all necessary optical properties, 3D models, and configuration files are in the correct locations. If not, you will need to locate the files when setting up the simulations.
 :::
 
 ### Creating a New Simulation
@@ -101,11 +101,11 @@ The first configuration screen allows you to set fundamental simulation paramete
 ::: callout-important
 ## Critical Settings
 
-**Atmosphere Simulation:** - Enable atmosphere simulation even if you only need "bottom of atmosphere" products - This ensures more accurate radiative transfer calculations
+**Atmosphere Simulation:** - Enable atmosphere simulation even if you only need "bottom of atmosphere" products - This ensures more realistic radiative transfer calculations
 
 **Threading Configuration:** - Switch to **Advanced Mode** - Set **Number of threads in DART tracking** to **12** - This optimizes performance on multi-core systems
 
-**Radiative Transfer Mode:** - For high spatial resolution forest scenes, use **bi-directional Light propagation mode (DART Lux)** - This provides the most accurate and computationally efficient results for detailed 3D scenes
+**Radiative Transfer Mode:** - For high spatial resolution forest scenes using 3D objects (not turbid cells) and simulation of RS images, use **bi-directional Light propagation mode (DART Lux)** - This provides the most accurate and computationally efficient results for detailed 3D scenes
 
 These settings are highlighted in @fig-basic-config.
 :::
@@ -113,7 +113,7 @@ These settings are highlighted in @fig-basic-config.
 ::: callout-note
 ## Python Integration
 
-The DART team provides Python scripts that can be implemented directly in DART or used for data preparation. These scripts offer additional automation capabilities. Refer to the DART manual for more details on Python integration.
+The DART team provides Python scripts that can be implemented directly in DART or used for data preparation. These scripts offer additional automation capabilities. Refer to the DART manual for more details on Python integration. Similarly, you can also implement your own Python scripts.
 :::
 
 ### Spectral Band Configuration
@@ -131,9 +131,15 @@ Configure the spectral bands for your simulation:
 | 2           | Mode R | 0.73                    | 0.032          |
 | 3           | Mode R | 0.85                    | 0.052          |
 
+::: callout-note
+## Configuration setting
+
+Configuration of spectral bands depend on the specifics of the sensor used to collect the data. In our case, the data were acquired using RGB-NIR sensor on UAV platform, and the configuration setting reflect characteristics of this sensor.
+:::
+
 ![Configuration dialogs for four spectral bands showing Mode, Central wavelength, and Spectral bandwidth parameters](DART_figures/fig04_spectral_bands.png){#fig-spectral-bands}
 
-@fig-spectral-bands shows the configuration windows for all four spectral bands. Each band is set to Mode R (reflectance) with specific central wavelengths and bandwidths appropriate for vegetation monitoring.
+@fig-spectral-bands shows the configuration windows for all four spectral bands. Each band is set to Mode R (reflectance) with specific central wavelengths and bandwidths appropriate for vegetation monitoring using RGB-NIR sensor on UAV platform.
 
 ::: callout-tip
 ## Working with Multiple Bands
@@ -154,7 +160,7 @@ Configure the image rendering and computation parameters:
 ::: callout-important
 ## Key Parameters
 
-**Image Resolution:** - Set **Target pixel size \[m\]** to **0.05** (5 cm) - This provides high-resolution output suitable for detailed analysis
+**Image Resolution:** - Set **Target pixel size \[m\]** to **0.05** (5 cm) - This provides high-resolution output suitable for detailed analysis. Beware that image resolution is only controlled by this parameter in the bi-directional mode. In the forward mode, the corresponding setting is made in the "Earth scene" section.
 
 **Optimized Parameters:** These values are results of optimization and consultation with the DART team: - **Target sample density per pixel (images):** 50 - **Maximal rendering time per image:** 2000 - **Number of repetitions of the user-defined scene:** 1
 
@@ -178,7 +184,7 @@ Parameter optimization can significantly affect both accuracy and computation ti
 Configure which products DART will generate:
 
 1.  Navigate to **Products → BRF/BTF**
-2.  Enable **"Write BRF/BTF files and maps"**
+2.  Disable **"Write BRF/BTF files and maps"**
 3.  Set **Type of color/model of Earth scene element:** Reflectance/Temperature
 4.  Configure **Images - stored per band (folder):**
     -   Format: **Ilwis (.mpr) and netcdf (.nc)**
@@ -219,7 +225,7 @@ Define the spectral properties of leaves using the PROSPECT model:
 ::: callout-note
 ## PROSPECT Model
 
-The PROSPECT model is a leaf-level radiative transfer model that simulates leaf optical properties based on biochemical composition. These parameters will be used for: - Look-Up Table (LUT) generation - Parameter retrieval from remote sensing images - Sensitivity analysis
+The [PROSPECT model](https://jbferet.gitlab.io/prospect/index.html) is a leaf-level radiative transfer model that simulates leaf optical properties based on biochemical composition. These parameters will be used for: - Look-Up Table (LUT) generation - Parameter retrieval from remote sensing images - Sensitivity analysis
 
 The multiplicative factor option allows scaling of optical properties by a constant value when needed.
 :::
@@ -267,11 +273,11 @@ This creates optical properties representing the forest understory and leaf litt
 
 Set up the basic scene parameters:
 
-**Scene Dimensions:** - **X max:** 30 m - **Y max:** 30 m
+**Scene Dimensions:** - **X:** 30 m - **Y:** 30 m
 
 **Ground Properties:** - **Optical property name:** "ground"
 
-**Geographic Location:** Set coordinates for central Czech Republic: - **Altitude of the DEM zero level:** 500 m - **Latitude:** \[50°; 30'\] - **Longitude:** \[17°; 50'\]
+**Geographic Location:** Set coordinates for central Czech Republic: - **Altitude of the DEM zero level:** 550 m - **Latitude:** \[50°; 30'\] - **Longitude:** \[17°; 50'\]
 
 ![Earth Scene configuration panel showing scene dimensions, ground optical properties, and geographic location](DART_figures/fig10_earth_scene.png){#fig-earth-scene}
 
@@ -280,9 +286,16 @@ Set up the basic scene parameters:
 ::: callout-note
 ## Scene Configuration Options
 
-**Exactly Periodic Scene:** - **Isolated scene:** Light crossing edges disappears (boundary effects) - **Repetitive scene:** Scene is virtually replicated around the edges (reduces boundary effects) - **Infinite slope:** Appropriate for sloped terrain
+**Exactly Periodic Scene:**
 
-**Cell Dimensions:** - These parameters are irrelevant for bi-directional mode - In other modes, they correspond to simulated image spatial resolution
+-   **Isolated scene:** Light crossing edges disappears (boundary effects)
+-   **Repetitive scene:** Scene is virtually replicated around the edges (reduces boundary effects)
+-   **Infinite slope:** Equivalent of “Repetitive scene”, but more suitable when using imported DEM or sloped terrain
+
+**Cell Dimensions:**
+
+-   These parameters are irrelevant for bi-directional mode
+-   In other modes, they correspond to simulated image spatial resolution
 :::
 
 ## Part 6: 3D Scene Objects
@@ -304,7 +317,12 @@ Add the tree locations and specifications:
 ::: callout-note
 ## Field File Format
 
-The `beech.txt` file contains information for each tree: - Species/object type identifier - XY position coordinates - Scaling factor (tree size) - Rotation angles
+The `beech.txt` file contains information for each tree:
+
+-   Species/object type identifier
+-   XY position coordinates
+-   Scaling factor (tree size)
+-   Rotation angles
 
 This format allows efficient specification of multiple objects without manually placing each one. Refer to the DART manual for detailed file format specifications.
 :::
@@ -350,9 +368,21 @@ For the leaves group within the 3D object:
 ::: callout-important
 ## Double Face Option
 
-The "Double face" option is **critical** for leaves. It ensures: - Both sides of leaf facets have optical properties - Proper simulation of leaf transmittance - Accurate light scattering within the canopy
+The "Double face" option is **critical** for leaves. It ensures:
+
+-   Both sides of leaf facets have optical properties (it is possible to set them differently for each side)
+-   Proper simulation of leaf transmittance
+-   Accurate light scattering within the canopy
 
 Without this option, the back face of leaves would be transparent, leading to incorrect radiative transfer calculations.
+:::
+
+::: callout-important
+## Group’s Color Option
+
+The “Group’s color” setting controls **Object Type** assignment. This allows products to be filtered or separated by type; for example, this setting can be used to categorize products related to the radiative budget.
+
+You can add a new color/type if needed in Earth scene: 3D imported object / Colors / Custom colors.
 :::
 
 ::: callout-note
@@ -394,14 +424,21 @@ Repeat the import and configuration process for all remaining 3D tree models:
 -   `beech_28`
 -   `beech_62`
 
-For each model: 1. Import the 3D file 2. Set a unique name 3. Assign a distinctive color for visualization 4. Configure leaf groups with "leaves" optical properties 5. Configure woody groups with "bark" optical properties 6. Enable double face for both groups
+For each model:
 
-![Complete 2D view of the forest scene showing all imported tree models as colored circles representing different tree types and sizes](DART_figures/fig15_complete_scene.png){#fig-complete-scene}
+1.  Import the 3D object file
+2.  Set a unique name
+3.  Assign a distinctive color for visualization
+4.  Configure leaf groups with "leaves" optical properties
+5.  Configure woody groups with "bark" optical properties
+6.  Enable double face for both groups
+
+![Complete 2D view of the forest scene showing all imported tree models as colored ellipses representing different tree types and sizes](DART_figures/fig15_complete_scene.png){#fig-complete-scene}
 
 ::: callout-note
 ## Visualization
 
-When all models are imported and configured, the 2D editor view (@fig-complete-scene) displays colored circles representing tree crowns at their specified locations. Different colors help distinguish between different tree models or size classes. The spatial distribution shown here matches the specifications in the beech.txt field file.
+When all models are imported and configured, the 2D editor view (@fig-complete-scene) displays colored ellipses representing tree crowns at their specified locations. Different colors help distinguish between different tree models or size classes. The spatial distribution shown here matches the specifications in the beech.txt field file.
 :::
 
 ## Part 7: Atmospheric Configuration (Optional)
@@ -481,8 +518,11 @@ The Sequence Launcher is a powerful tool for generating Look-Up Tables (LUTs) by
 3.  Click **"Add"**
 4.  Select parameters to vary:
     -   Navigate through the parameter tree
-    -   Select optical properties or structural parameters
-    -   Define the range of values
+    -   Select optical properties or structural parameters (for generating LUT for using an inversion method based vegetation parameters retrieval algorithms)
+    -   Set the number of variations (“Number of cases” parameter)
+    -   Define the range of values. This is possible by manually writing values in the table in the window or to load a simple text file with list of values (option “Import ‘Data Definition’”)
+5.  Configure the sequence
+6.  Save the sequence – it will create a xml file with the sequence parameters (e.g. DART/user_data/simulations/forest_scene/LUT_gen.xml)
 
 ![Sequence Launcher interface showing (left) execution progress, (center) parameter selection tree, and (right) process configuration options](DART_figures/fig18_sequence_launcher.png){#fig-sequence-launcher}
 
@@ -490,30 +530,55 @@ The Sequence Launcher is a powerful tool for generating Look-Up Tables (LUTs) by
 
 ### Configuration Options
 
-**Parameter Selection:** Choose which parameters to vary, such as: - PROSPECT biochemical parameters (Chlorophyll, LAI, etc.) - Structural parameters (tree dimensions, densities) - Atmospheric conditions - Sun angles
+**Parameter Selection:** Choose which parameters to vary, such as:
 
-**Process Configuration:** In **Preferences → Process and threads to run:** - Select which modules to run (based on changed parameters) - Set number of parallel simulations - Each simulation uses the specified number of threads
+-   PROSPECT biochemical parameters (Chlorophyll, Carotenoids, etc.)
+-   Structural parameters (LAI, LAD, tree dimensions, densities)
+-   Atmospheric conditions
+-   Sun angles
+
+**Process Configuration:** In **Preferences → Process and threads to run:**
+
+-   Select which modules to run (based on changing/varying the parameters)
+-   Set number of parallel simulations
+-   Each simulation uses the number of threads specified in Editor
 
 ::: callout-tip
 ## Parallel Processing
 
-Example configuration for 12-core system: - Threads per simulation: 3 - Parallel simulations: 4 - Total thread usage: 12
+Example configuration for 12-core system:
+
+-   Threads per simulation: 3
+-   Parallel simulations: 4
+-   Total thread usage: 3 x 4 = 12
 
 Balance parallel simulations and threads per simulation based on your system's capabilities and memory.
 :::
 
 ### Running the Sequence
 
-1.  Click **"Prepare and run sequence"**
-2.  Monitor progress in the console window
-3.  Results will be saved in numbered subdirectories
+Follow the following steps if you run the sequence for the first time, or if you need to restart it (e.g. after modifying it in Editor):
+
+1.  Click **"Prepare and run sequence"** – choose the file, which was created during the saving of the sequence (LUT_gen.xml) – this will create several files, which will help to control the sequence outputs and status.
+2.  Monitor progress in the console window or in xml files created in previous step, which are updated during the sequence running (e.g. LUT_gen_Status.json)
+3.  Results will be saved in numbered subdirectories and in a database if selected in the sequence setting (e.g. forest_scene_LUT_gen.db)
+
+In case the sequence has already been run, you can run it again by replacing the first step with (other two steps remain same):
+
+1.  Click “Start/Continue sequence” – choose xml sequence launcher file created during the first run of the sequence (e.g., LUT_gen_Launcher.xml)
 
 ::: callout-note
 ## LUT Applications
 
-Generated LUTs are valuable for: - Parameter retrieval from remote sensing data - Sensitivity analysis - Model inversion - Uncertainty quantification - Training machine learning models
+Generated LUTs are valuable for:
 
-The systematic parameter variation creates a database relating scene parameters to simulated reflectance.
+-   Parameter retrieval from remote sensing data
+-   Sensitivity analysis
+-   Model inversion
+-   Uncertainty quantification
+-   Training machine learning models
+
+The systematic parameter variation creates a database relating scene parameters to simulated reflectance or other products.
 :::
 
 ## Summary and Best Practices
@@ -521,27 +586,67 @@ The systematic parameter variation creates a database relating scene parameters 
 ::: panel-tabset
 ## Scene Setup
 
-**Essential Steps:** - Proper file organization in DART directories - Careful spectral band configuration - Appropriate spatial resolution for application - Realistic optical properties from measurements
+**Essential Steps:**
 
-**Common Mistakes to Avoid:** - Forgetting to enable double face for leaves - Incorrect spectral bandwidth settings - Insufficient spatial resolution - Isolated scene boundaries causing edge effects
+-   Proper file organization in DART directories
+-   Careful spectral band configuration
+-   Appropriate spatial resolution for application
+-   Realistic optical properties from measurements or adequate inputs for PROSPECT model
+
+**Common Mistakes to Avoid:**
+
+-   Forgetting to enable double face for leaves
+-   Incorrect spectral bandwidth settings
+-   Insufficient spatial resolution
+-   Isolated scene boundaries causing edge effects
 
 ## Optical Properties
 
-**Best Practices:** - Use measured optical properties when available - Validate PROSPECT parameters against lab measurements - Consider seasonal variations in leaf properties - Document all optical property sources
+**Best Practices:**
 
-**Considerations:** - Bark properties vary by species and condition - Understory optical properties affect overall scene reflectance - Leaf age and health influence biochemical parameters
+-   Use measured optical properties when available
+-   Validate PROSPECT parameters against lab measurements
+-   Consider seasonal variations in leaf properties
+-   Document all optical property sources
+
+**Considerations:**
+
+-   Bark properties vary by species and condition
+-   Understory optical properties affect overall scene reflectance
+-   Leaf age and health influence biochemical parameters
 
 ## Computational Efficiency
 
-**Optimization Strategies:** - Use appropriate thread count for your system - Enable Russian Roulette acceleration - Optimize rendering time parameters - Only generate needed output products - Use periodic scene boundaries to reduce edge effects
+**Optimization Strategies:**
 
-**Resource Requirements:** - RAM: 16-32 GB recommended for large scenes - Storage: Plan for large output files (GB per simulation) - CPU: Multi-core processor essential for reasonable run times
+-   Use appropriate thread count for your system
+-   Enable Russian Roulette acceleration
+-   Optimize rendering time parameters
+-   Only generate needed output products
+-   Use periodic scene boundaries to reduce edge effects
+
+**Resource Requirements:**
+
+-   RAM: 16-32 GB recommended for smaller forest scenes
+-   Storage: Plan for large output files (GB per simulation)
+-   CPU: Multi-core processor essential for reasonable run times
 
 ## Quality Control
 
-**Validation Steps:** - Visual inspection of 2D scene layout - Check for error messages in Editor - Verify spectral signatures are realistic - Compare with field measurements if available - Test with simplified scenes first
+**Validation Steps:**
 
-**Troubleshooting:** - Save frequently during setup - Test with single spectral band initially - Use smaller scene for parameter testing - Check DART manual for error messages
+-   Visual inspection of 2D scene layout
+-   Check for error messages in Editor
+-   Verify spectral signatures are realistic
+-   Compare with field measurements if available
+-   Test with simplified scenes first – Check the output of running DART modules in the main window tab “Console”
+
+**Troubleshooting:**
+
+-   Save frequently during setup
+-   Test with single spectral band initially
+-   Use smaller scene for parameter testing
+-   Check DART manual for error messages or the [DART community forum](https://groups.google.com/g/dart-cesbio)
 :::
 
 ## Advanced Topics
@@ -553,9 +658,18 @@ Creating your own tree models:
 ::: callout-tip
 ## 3D Object Requirements
 
-DART accepts 3D objects in several formats: - OBJ (most common) - PLY - FBX (with conversion)
+DART accepts 3D objects in several formats:
 
-Requirements: - Properly defined groups (leaves, trunk, branches) - Correct facet normals - Reasonable polygon count (balance detail vs. computation) - Separate materials for different components
+-   OBJ (most common)
+-   PLY
+-   FBX (with conversion)
+
+Requirements:
+
+-   Properly defined groups (leaves, trunk, branches)
+-   Correct facet normals
+-   Reasonable polygon count (balance detail vs. computation)
+-   Separate materials for different components
 :::
 
 ### Python Integration
@@ -582,31 +696,59 @@ For detailed atmospheric studies:
 
 Recommended validation methods:
 
-1.  **Lab measurements:** Compare PROSPECT outputs to spectroradiometer data
-2.  **Field campaigns:** Validate scene reflectance with handheld or UAV spectrometers
-3.  **Cross-comparison:** Compare with other radiative transfer models (PROSAIL, librat)
-4.  **Sensitivity analysis:** Use Sequence Launcher to assess parameter impacts
+1.  **Real RS data:** Compare the simulated product to real remote sensing data (UAV, airborne, satellite) – choose the most realistic scene, which will then serve as the base for LUT generation or variation of studied characteristics
+
+2.  **Lab measurements:** Compare PROSPECT outputs to spectroradiometer data
+
+3.  **Field campaigns:** Validate scene reflectance with handheld or UAV spectrometers
+
+4.  **Cross-comparison:** Compare with other radiative transfer models (LESS, PROSAIL, librat)
+
+5.  **Sensitivity analysis:** Use Sequence Launcher to assess parameter impacts
 
 ## Additional Resources
 
 ::: callout-note
 ## Learning Resources
 
-**DART Documentation:** - [Official DART Website](https://dart.omp.eu/) - User manual (included with installation) - Tutorial collection - Forum for user questions
+**DART Documentation:**
 
-**Scientific Background:** - Gastellu-Etchegorry et al. publications on DART methodology - Remote sensing textbooks on radiative transfer - PROSPECT model documentation
+-   [Official DART Website](https://dart.omp.eu/)
+-   User manual (included with installation)
+-   Tutorial collection
+-   Forum for user questions
 
-**Community:** - DART user mailing list - Annual DART training workshops - CESBIO laboratory contacts
+**Scientific Background:**
+
+-   Gastellu-Etchegorry et al. publications on DART methodology
+-   Remote sensing textbooks on radiative transfer
+-   PROSPECT model documentation
+
+**Community:**
+
+-   DART user mailing list
+-   Annual DART training workshops
+-   CESBIO laboratory contacts
 :::
 
 ::: callout-warning
 ## Important Considerations
 
-**Model Limitations:** - DART is computationally intensive for large scenes - Accuracy depends on input data quality - Simplified atmospheric models may not capture all effects - 3D object complexity affects computation time
+**Model Limitations:**
 
-**Data Requirements:** - Accurate 3D scene geometry - Validated optical properties - Appropriate atmospheric parameters - Sufficient computational resources
+-   DART is computationally intensive for large scenes
+-   Accuracy depends on input data quality
+-   Simplified atmospheric models may not capture all effects
+-   3D object complexity affects computation time
 
-**Application Scope:** DART is suitable for: ✓ Forest and vegetation studies ✓ Urban remote sensing ✓ Precision agriculture ✓ Sensor design and testing
+**Data Requirements:**
+
+-   Accurate 3D scene geometry
+-   Validated optical properties
+-   Appropriate atmospheric parameters
+-   Sufficient computational resources
+
+**Application Scope:** DART is suitable for: ✓ Forest and vegetation studies ✓ Urban remote sensing ✓ Precision agriculture Sensor design and testing
 
 May be excessive for: ✗ Simple BRDF calculations (use simpler models) ✗ Very large spatial extents (consider other approaches) ✗ Real-time applications (computation time prohibitive)
 :::
@@ -634,29 +776,62 @@ The skills developed in this tutorial provide a foundation for more advanced DAR
 ::: panel-tabset
 ## Installation Issues
 
-**Problem:** DART won't start - Check Java installation (required) - Verify environment variables - Run from command line for error messages
+**Problem:** DART won't start 
 
-**Problem:** Database files not found - Verify file paths in simulation settings - Check that extracted files are in correct DART directories - Use absolute paths if relative paths fail
+- Check Java installation (required) 
+- Verify environment variables 
+- Run from command line for error messages
+
+**Problem:** Database files not found 
+
+- Verify file paths in simulation settings 
+- Check that extracted files are in correct DART directories 
+- Use absolute paths if relative paths fail
 
 ## Simulation Errors
 
-**Problem:** Out of memory errors - Reduce scene size or resolution - Decrease number of threads - Increase Java heap size in DART configuration
+**Problem:** Out of memory errors 
 
-**Problem:** Very slow execution - Verify thread count settings - Check for excessive output products - Consider using coarser resolution for testing
+- Reduce scene size or spectral and/or spatial resolution 
+- Decrease number of threads 
+- Increase Java heap size in DART configuration
+
+**Problem:** Very slow execution 
+
+- Verify thread count settings 
+- Check for excessive output products 
+- Consider using coarser spectral and/or spatial resolution for testing
 
 ## Output Issues
 
-**Problem:** Images not generated - Check "Products" configuration - Verify maximal VZA settings - Ensure sufficient disk space - Check write permissions
+**Problem:** Images not generated 
 
-**Problem:** Unexpected spectral values - Verify optical property assignments - Check for missing double face settings - Validate PROSPECT parameters
+- Check "Products" configuration 
+- Verify maximal VZA settings 
+- Ensure sufficient disk space 
+- Check write permissions
+
+**Problem:** Unexpected spectral values 
+
+- Verify optical property assignments 
+- Check for missing double face settings 
+- Validate PROSPECT parameters
 
 ## Scene Configuration
 
-**Problem:** Trees not visible in 2D view - Enable "Show this field's objects in the 2D view" - Check field file format and paths - Verify tree positions are within scene bounds
+**Problem:** Trees not visible in 2D view 
 
-**Problem:** Optical properties not applied - Confirm optical property names match - Check database file paths - Verify group assignments in 3D objects
+- Enable "Show this field's objects in the 2D view" 
+- Check field file format and paths 
+- Verify tree positions are within scene bounds
+
+**Problem:** Optical properties not applied 
+
+- Confirm optical property names match 
+- Check database file paths 
+- Verify group assignments in 3D objects
 :::
 
----
+------------------------------------------------------------------------
 
 ![](logos.png)
