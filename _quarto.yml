@@ -5,6 +5,8 @@ project:
 website:
   title: "Remote Sensing of Forests"
   navbar:
+    logo: logo_EB_green.png
+    logo-href: "https://earthbridge.eu/"
     left:
       - text: "Home"
         href: index.qmd
@@ -31,7 +33,7 @@ website:
           - text: "Theory"
             href: topics/RADAR_theory.qmd
           - text: "Practice"
-            href: topics/RADAR_tutorial.qmd
+            href: topics/RADARsilent_tutorial.qmd
       - text: "SAR Tomography"
         menu:
           - text: "Intro"
